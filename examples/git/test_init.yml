@@ -1,0 +1,26 @@
+---
+# Run `git init` and verify that the expected directory
+# structure and file contents are produced.
+
+- env:
+    CMD: git
+    CMD_NAME: Git
+    REPO_DIR: .git/
+
+- run: |
+    ${CMD} init
+
+- assert-output: |
+    Initialized empty ${CMD_NAME} repository in ${CWD}/${REPO_DIR}
+
+- assert-tree:
+    .git:
+    - HEAD
+    - objects:
+    - refs:
+      - heads:
+      - tags:
+
+- assert-file-utf8:
+    .git/HEAD: |
+      ref: refs/heads/master

@@ -29,13 +29,30 @@ class CliTestCase(unittest.TestCase):
         path = Path(path)
         with path.open() as f:
             task_list = yaml.load(f)
-        return cls(task_list)
+        return cls(task_list, path=path)
 
-    def __init__(self, task_list):
+    def __init__(self, task_list, path=None):
         super().__init__()
         self.commands = []
 
+        if not isinstance(task_list, list):
+            raise RuntimeError(
+                ("Parse error in {} "
+                 "(YAML file does not evaluate "
+                 "to a list)").format(
+                    path
+                )
+            )
+
         for task_dict in task_list:
+            if not isinstance(task_dict, dict):
+                raise RuntimeError(
+                    ("Parse error in {} "
+                     "(YAML for task does not evaluate "
+                     "to a dict)").format(
+                        path or "<unknown>"
+                    )
+                )
             commands = CommandFactory.build_commands(task_dict)
             self.commands.extend(commands)
 

@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 """
-climactic: YAML-based test framework for command-line utilities
+climactic
+YAML-based test framework for commandline utilities
 
 Copyright (C) 2015  Brian Jorgensen
 

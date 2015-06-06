@@ -1,10 +1,23 @@
 # ``climactic``
 
-*YAML-based test framework for command-line utilities*
+*Testing command-line utilities*
+
+
+## Install
+
+Most simply:
+
+    pip install climactic
+
+
+## Usage
+
+### ``test_init.yml``
 
     ---
-    # Run `git init` and verify that the expected directory
-    # structure and file contents are produced.
+    # Run `git init` and verify that
+    # the expected directory structure
+    # and file contents are produced.
     
     - env:
         CMD: git

@@ -1,0 +1,41 @@
+#! /usr/bin/env python
+"""
+"""
+import sys
+from pathlib import Path
+
+
+this_file_path = Path(__file__)
+this_dir_path = this_file_path.parent
+project_path = this_dir_path.parent
+
+
+try:
+    sys.path.remove(str(this_dir_path))
+except:
+    pass
+sys.path.append(str(project_path))
+
+
+try:
+    import climactic
+except ImportError:
+    print("Failed to import the climactic package\n")
+    print("sys.path:\n{}\n".format(
+        "\n".join("    " + str(p) for p in sys.path)
+    ))
+    raise
+
+
+from climactic.runner import CliTestRunner
+
+
+def main(root_dir):
+    result = CliTestRunner.run_in_dir(root_dir)
+    status = 0 if result.wasSuccessful() else 1
+    return status
+
+
+if __name__ == "__main__":
+    status = main(*(sys.argv[1:] or ["."]))
+    exit(status)

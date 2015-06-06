@@ -42,7 +42,8 @@ setup(
         "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
         "Topic :: Software Development :: Testing",
-        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+        "License :: OSI Approved"
+        " :: GNU General Public License v2 (GPLv2)",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
@@ -50,7 +51,6 @@ setup(
 
     ],
     scripts=[
-        "bin/nit",
-        "bin/nit-git"
+        "bin/climactic"
     ]
 )

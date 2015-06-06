@@ -1,5 +1,5 @@
 PROJECT_URL = 'https://github.com/b33j0r/climactic'
-PROJECT_VERSION = '0.1.0'
+PROJECT_VERSION = '0.1.1'
 
 
 import os

@@ -12,19 +12,23 @@ Most simply:
 
 ## Usage
 
-### ``test_init.yml``
+Create a test file, for example, ``test_git_init.yml``:
 
     ---
     # Run `git init` and verify that
     # the expected directory structure
     # and file contents are produced.
     
+    # Sets environment vars
     - env:
         CMD: git
     
+    # Runs `git init`
     - run: |
         ${CMD} init
     
+    # Verifies the dir tree and files
+    # were created
     - assert-tree:
       - .git:
         - HEAD
@@ -33,9 +37,21 @@ Most simply:
           - heads:
           - tags:
     
+    # Verifies that the file .git/HEAD
+    # was populated with the ref string
+    # for the initial master branch
     - assert-file-utf8:
       - .git/HEAD: |
-          refs/origin/master
+          refs/heads/master
+
+``cd`` to a directory containing this file and run:
+
+    ~/climactic/examples$ climactic
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.029s
+    
+    OK
 
 
 ## License

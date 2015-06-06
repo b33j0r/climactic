@@ -1,5 +1,5 @@
 PROJECT_URL = 'https://github.com/b33j0r/climactic'
-PROJECT_VERSION = '0.1.1'
+PROJECT_VERSION = '0.1.2'
 PROJECT_DESCRIPTION = """
 YAML-based tests for commandline utilities
 """.strip()
@@ -10,7 +10,7 @@ written as YAML files which specify the commands to run
 along with assertions about the output (currently, stdout
 and file/directory contents).
 
-* NOTE: climactic is a Python 3 package
+NOTE: climactic is a Python 3 package
 
 Features
 - Aggregate tests recursively in a directory matching the

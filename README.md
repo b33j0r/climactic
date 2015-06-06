@@ -29,9 +29,9 @@ and file/directory contents).
 To use the most recent source code (recommended at this time,
 as development is very active):
 
-virtualenv -p python3 climactic_venv
-source climactic_venv/bin/activate
-pip install -U -e git+https://github.com/b33j0r/climactic.git#egg=climactic
+    virtualenv -p python3 climactic_venv
+    source climactic_venv/bin/activate
+    pip install -U -e git+https://github.com/b33j0r/climactic.git#egg=climactic
 
 ``climactic`` is registered in PyPI, so pip works too:
 

@@ -20,7 +20,7 @@ class CliTestSuite(unittest.TestSuite):
         dir_path = Path(dir_path)
         target_paths = dir_path.glob(
             ("**" if recursive else "*") +
-            "/*.yml"
+            "/test_*.yml"
         )
         suite = cls()
         tests = []

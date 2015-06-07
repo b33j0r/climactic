@@ -13,6 +13,8 @@ and file/directory contents).
 
 ### Hello, World!
 
+``test_hello.yml``:
+
     ---
     # A very simple test!
     
@@ -21,6 +23,15 @@ and file/directory contents).
     
     - assert-output: >
         Hello world!
+
+Run the test runner:
+
+    ~$ climactic test_hello.yml
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.029s
+    
+    OK
 
 
 ### Features
@@ -53,10 +64,14 @@ as development is very active):
 Either method will install the ``climactic`` python package
 as well as the ``climactic`` commandline utility.
 
+
 ## Usage Examples
 
-After installation, the following should work out of the box:
+The following should work out of the box if you opted to
+install from source (and, for example, cloned the source tree
+to ``~/climactic``):
 
+    ~$ cd climactic
     ~/climactic$ climactic examples -v 1
     ..
     ----------------------------------------------------------------------

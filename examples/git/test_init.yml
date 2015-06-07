@@ -10,8 +10,9 @@
 - run: |
     ${CMD} init
 
-- assert-output: |
-    Initialized empty ${CMD_NAME} repository in ${CWD}/${REPO_DIR}
+- assert-output: >
+    Initialized empty ${CMD_NAME}
+    repository in ${CWD}/${REPO_DIR}
 
 - assert-tree:
     .git:

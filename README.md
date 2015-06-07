@@ -46,34 +46,44 @@ as well as the ``climactic`` commandline utility.
 Create a test file ``test_git_init.yml``:
 
     ---
-    # Run `git init` and verify that
-    # the expected directory structure
-    # and file contents are produced.
+    # Run `git init` and verify
+    # that the expected directory
+    # structure and file contents
+    # are produced.
     
-    # Sets environment vars
+    # Sets environment variables
     - env:
         CMD: git
+        CMD_NAME: Git
+        REPO_DIR: .git/
     
-    # Runs `git init`
+    # Runs `git init` in a new
+    # temporary directory
     - run: |
         ${CMD} init
     
-    # Verifies the dir tree and files
-    # were created
+    # Checks that stdout was as
+    # expected
+    - assert-output: >
+        Initialized empty ${CMD_NAME}
+        repository in ${CWD}/${REPO_DIR}
+    
+    # Verifies that expected files
+    # and directories were created
     - assert-tree:
-      - .git:
+        .git:
         - HEAD
         - objects:
         - refs:
           - heads:
           - tags:
     
-    # Verifies that the file .git/HEAD
-    # was populated with the ref string
-    # for the initial master branch
+    # Verifies that the HEAD file
+    # has the correct initial value
     - assert-file-utf8:
-      - .git/HEAD: |
-          refs/heads/master
+        .git/HEAD: |
+          ref: refs/heads/master
+
 
 ``cd`` to a directory containing this file and run:
 

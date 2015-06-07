@@ -27,13 +27,7 @@ except ImportError:
     raise
 
 
-from climactic.runner import CliTestRunner
-
-
-def main(root_dir):
-    result = CliTestRunner.run_in_dir(root_dir)
-    status = 0 if result.wasSuccessful() else 1
-    return status
+from climactic.cli import main
 
 
 if __name__ == "__main__":

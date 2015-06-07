@@ -20,6 +20,7 @@ sys.path.append(str(project_path))
 try:
     import climactic
 except ImportError:
+    climactic = None
     print("Failed to import the climactic package\n")
     print("sys.path:\n{}\n".format(
         "\n".join("    " + str(p) for p in sys.path)
@@ -31,5 +32,5 @@ from climactic.cli import main
 
 
 if __name__ == "__main__":
-    status = main(*(sys.argv[1:] or ["."]))
+    status = main(*sys.argv[1:])
     exit(status)

@@ -48,7 +48,15 @@ https://github.com/b33j0r/climactic/blob/master/LICENSE
 parser.add_argument(
     "target",
     nargs="*",
-    help="Files and/or directories to test"
+    help="Files and/or directories to test",
+    default=["."]
+)
+
+parser.add_argument(
+    "-v", "--verbosity",
+    nargs="?",
+    type=int,
+    default=1
 )
 
 
@@ -56,7 +64,8 @@ def main(*args):
     namespace = parser.parse_args(args)
     try:
         result = CliTestRunner.run_in_dir(
-            *namespace.target
+            *namespace.target,
+            verbosity=namespace.verbosity
         )
         status = 0 if result.wasSuccessful() else 1
         return status

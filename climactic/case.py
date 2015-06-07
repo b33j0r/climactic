@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 """
 """
+import os
 import logging
 import unittest
 import yaml
@@ -51,6 +52,7 @@ class CliTestCase(unittest.TestCase):
     def __init__(self, task_list, path=None):
         super().__init__()
         self.commands = []
+        self.path = path
 
         if not isinstance(task_list, list):
             raise RuntimeError(
@@ -86,3 +88,6 @@ class CliTestCase(unittest.TestCase):
             logger.debug("teardown")
             for command in self.commands:
                 command.teardown(None)
+
+    def __str__(self):
+        return str(self.path.relative_to(Path(os.getcwd())))

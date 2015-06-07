@@ -38,14 +38,52 @@ Run the test runner:
 - Aggregate tests recursively in a directory matching the
   pattern ``test_*.yml`` using the commandline tool
   ``climactic``
-- Compatibility with the standard ``unittest`` package
+- Compare stdout, directory structure, and file contents
+  against expected string values
 - Tests are run in a temporary directory to avoid data loss
   and path-dependent results
 - Set environment variables per-test with the ``env`` task
-- Compare stdout, directory structure, and file contents
-  to expected string values
 - ``bash``-like ``${VAR}`` substitution for input commands
   and output validation
+- Compatibility with the standard ``unittest`` package
+
+
+#### Commands
+
+The top-level of a climactic test file describes a list of
+commands. Commands are executed in order (unless specified as a
+dictionary, in which case execution order is undefined, but
+each is still executed).
+
+The following commands are currently supported.
+
+##### Action Commands (shell interaction)
+
+- **env**:
+  sets environment variables which can be used in ``run``
+  commands and assertions
+  
+- **run**:
+  runs one or more commands; nearly acts like a bash script
+  (performs environment variable substitution)
+
+- **write-file-utf8**:
+  writes a string to a file
+
+##### Assertion Commands (test conditions)
+
+- **assert-output**:
+  compares the output of the most recent ``run`` command
+  with an expected variable (performs environment variable
+  substitution)
+
+- **assert-tree**:
+  compares the directory structure of the directory being
+  tested against an expected structure
+
+- **assert-file-utf8**:
+  compares the contents of a file against an expected
+  string
 
 
 ## Install
@@ -140,6 +178,15 @@ Now run ``climactic``:
     Ran 1 test in 0.029s
     
     OK
+
+
+## Contributing
+
+ * Please do!
+ * In my personal projects, I usually use a narrow line width of
+ 80 characters because I like to review code on my phone or tablet;
+ this is a loose standard, but there is a greater probability of
+ getting your pull request accepted if you adopt it :)
 
 
 ## Author

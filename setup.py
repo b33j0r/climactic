@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 import os
 
 from setuptools import setup
@@ -59,7 +60,9 @@ setup(
         "Operating System :: OS Independent"
 
     ],
-    scripts=[
-        "bin/climactic"
-    ]
+    entry_points={
+        'console_scripts': [
+            'climactic=climactic.cli:main'
+        ],
+    }
 )

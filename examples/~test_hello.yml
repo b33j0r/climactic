@@ -1,0 +1,8 @@
+---
+# A very simple test!
+
+- run: |
+    echo Um, hi!
+
+- assert-output: >
+    Hello world!

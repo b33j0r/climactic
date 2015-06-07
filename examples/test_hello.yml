@@ -1,0 +1,8 @@
+---
+# A very simple test!
+
+- run: |                 # '|' specifies verbatim string input
+    echo Hello world!
+
+- assert-output: >       # '<' specifies folded-style input
+    Hello world!

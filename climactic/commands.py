@@ -6,8 +6,9 @@
 import os
 import subprocess
 import logging
-from abc import ABCMeta, abstractmethod
 from pathlib import Path
+from abc import ABCMeta, abstractmethod
+
 from climactic.utility import substitute_env_vars
 
 logger = logging.getLogger(__name__)

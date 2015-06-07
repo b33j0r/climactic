@@ -7,10 +7,11 @@
     CMD_NAME: Git
     REPO_DIR: .git/
 
-- run: |
+- run: |                 # '|' specifies verbatim string input
     ${CMD} init
 
-- assert-output: >
+- assert-output: >       # '<' specifies folded-style input
+
     Initialized empty ${CMD_NAME}
     repository in ${CWD}/${REPO_DIR}
 

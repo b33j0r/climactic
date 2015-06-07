@@ -16,20 +16,51 @@ class CliTestSuite(unittest.TestSuite):
     """
 
     @classmethod
-    def from_dir(cls, dir_path, recursive=True):
+    def from_targets(cls, *targets, **kwargs):
+        suite = cls()
+        tests = []
+        for target in targets:
+            target_path = Path(target).resolve()
+
+            if target_path.is_dir():
+                target_tests = cls.collect_dir(
+                    target_path,
+                    **kwargs
+                )
+                tests.extend(target_tests)
+
+            else:
+                target_test = cls.collect_file(
+                    target_path
+                )
+                tests.append(target_test)
+        suite.addTests(tests)
+        return suite
+
+    @classmethod
+    def from_dir(cls, dir_path, **kwargs):
+        return cls.from_targets(dir_path, **kwargs)
+
+    @classmethod
+    def collect_dir(cls, dir_path, recursive=True):
+        tests = []
+
         dir_path = Path(dir_path)
         target_paths = dir_path.glob(
             ("**" if recursive else "*") +
             "/test_*.yml"
         )
-        suite = cls()
-        tests = []
+
         for target_path in target_paths:
-            logger.debug(
-                "Loading yml file %r",
-                target_path
-            )
-            test = CliTestCase.from_path(target_path)
+            test = cls.collect_file(target_path)
             tests.append(test)
-        suite.addTests(tests)
-        return suite
+        return tests
+
+    @classmethod
+    def collect_file(cls, target_path):
+        logger.debug(
+            "Loading yml file %r",
+            target_path
+        )
+        test = CliTestCase.from_path(target_path)
+        return test

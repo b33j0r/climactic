@@ -5,8 +5,10 @@ import logging
 import unittest
 import yaml
 from pathlib import Path
+from yaml.scanner import ScannerError
 
 from climactic.commands import CommandFactory
+from climactic.errors import ClimacticUserError
 from climactic.utility import cd_temp_dir
 
 
@@ -28,7 +30,22 @@ class CliTestCase(unittest.TestCase):
         """
         path = Path(path)
         with path.open() as f:
-            task_list = yaml.load(f)
+            try:
+                task_list = yaml.load(f)
+            except ScannerError as exc:
+                raise ClimacticUserError(
+                    (
+                        "Invalid YAML syntax"
+                        "\n{}\n{}\n{}"
+                    ).format(
+                        exc.context_mark,
+                        exc.problem.replace(
+                            "could not found",
+                            "could not find"
+                        ),
+                        exc.problem_mark
+                    )
+                )
         return cls(task_list, path=path)
 
     def __init__(self, task_list, path=None):

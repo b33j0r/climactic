@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 """
-
+Defines the commands that can be used at the
+top-level of an input test YAML file.
 """
 
 import os
@@ -8,6 +9,7 @@ import subprocess
 import logging
 from pathlib import Path
 from abc import ABCMeta, abstractmethod
+import traceback
 
 from climactic.utility import substitute_env_vars
 
@@ -43,7 +45,15 @@ class CommandFactory:
             logger.error(
                 "Command %r is not defined", command_name
             )
-            exit(1)
+        except TypeError:
+            logger.error(
+                (
+                    "Command %r is not "
+                    "implemented correctly\n\n"
+                    "%s"
+                ), command_name, traceback.format_exc()
+            )
+        exit(1)
 
     @classmethod
     def build_commands(cls, task_dict):
@@ -72,6 +82,8 @@ class CommandMeta(ABCMeta):
 class Command(metaclass=CommandMeta):
 
     """
+    Base class for all commands that can be used in
+    test YAML files
     """
 
     @abstractmethod
@@ -171,7 +183,10 @@ class AssertOutputCommand(Command):
             actual = os.environ["OUTPUT"]
         except KeyError:
             case.fail("No command ran before assert-output")
-        case.assertEqual(expected.strip(), actual.strip())
+        case.assertEqual(
+            expected.strip(),
+            actual.strip()
+        )
 
 
 class AssertTreeCommand(Command):
@@ -201,12 +216,14 @@ class AssertTreeCommand(Command):
             if type_str == "dir":
                 case.assertTrue(
                     path.is_dir(),
-                    msg="Path is not dir: {}".format(path)
+                    msg="Path exists, but "
+                        "is not a directory: {}".format(path)
                 )
             else:
                 case.assertTrue(
                     path.is_file(),
-                    msg="Path is not file: {}".format(path)
+                    msg="Path exists, but "
+                        "is not a file: {}".format(path)
                 )
 
     def _parse_paths(self, spec, root=None):
@@ -264,4 +281,30 @@ class AssertFileUtf8Command(Command):
             case.assertTrue(file_path.exists())
             with file_path.open() as f:
                 actual = f.read()
-            case.assertEqual(expected.strip(), actual.strip())
+            case.assertEqual(
+                expected.strip(),
+                actual.strip()
+            )
+
+
+class WriteFileUtf8Command(Command):
+
+    """
+    Writes text to a file, encoded in utf-8.
+    """
+
+    NAME = "write-file-utf8"
+
+    def __init__(self, spec):
+        assert len(spec) == 1
+        self.path, self.contents = next(
+            iter(
+                spec.items()
+            )
+        )
+        self.path = Path(self.path)
+
+    def run(self, state, case):
+        with (Path(os.getcwd())/self.path).open('w') as f:
+            f.write(self.contents)
+        os.environ["OUTPUT"] = ""

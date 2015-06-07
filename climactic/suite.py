@@ -52,15 +52,21 @@ class CliTestSuite(unittest.TestSuite):
         )
 
         for target_path in target_paths:
-            test = cls.collect_file(target_path)
+            test = cls.collect_file(
+                target_path,
+                base_path=dir_path
+            )
             tests.append(test)
         return tests
 
     @classmethod
-    def collect_file(cls, target_path):
+    def collect_file(cls, target_path, base_path=None):
         logger.debug(
             "Loading yml file %r",
             target_path
         )
-        test = CliTestCase.from_path(target_path)
+        test = CliTestCase.from_path(
+            target_path,
+            base_path=base_path
+        )
         return test

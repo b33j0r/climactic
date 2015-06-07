@@ -10,7 +10,7 @@
 - run: |                 # '|' specifies verbatim string input
     ${CMD} init
 
-- assert-output: >       # '<' specifies folded-style input
+- assert-output: >       # '<' specifies folded-style input, meaning newlines are removed
 
     Initialized empty ${CMD_NAME}
     repository in ${CWD}/${REPO_DIR}

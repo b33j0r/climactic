@@ -22,7 +22,7 @@ class CliTestCase(unittest.TestCase):
     """
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path, base_path=None):
         """
         Loads a test case from a YAML file.
 
@@ -47,12 +47,22 @@ class CliTestCase(unittest.TestCase):
                         exc.problem_mark
                     )
                 )
-        return cls(task_list, path=path)
+        return cls(
+            task_list,
+            path=path,
+            base_path=base_path
+        )
 
-    def __init__(self, task_list, path=None):
+    def __init__(self, task_list, path=None, base_path=None):
         super().__init__()
         self.commands = []
-        self.path = path
+        self.path = Path(path)
+        if path and not base_path:
+            raise ValueError(
+                "base_path must be specified "
+                "when path is specified"
+            )
+        self.base_path = Path(base_path)
 
         if not isinstance(task_list, list):
             raise RuntimeError(
@@ -90,4 +100,8 @@ class CliTestCase(unittest.TestCase):
                 command.teardown(None)
 
     def __str__(self):
-        return str(self.path.relative_to(Path(os.getcwd())))
+        if self.base_path:
+            return str(self.path.relative_to(
+                self.base_path
+            ))
+        return str(self.path)

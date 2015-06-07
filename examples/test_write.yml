@@ -1,0 +1,10 @@
+---
+# A simple test which writes to a file
+
+- write-file-utf8:
+    hello.txt: Hello world!
+
+- assert-output: ""
+
+- assert-file-utf8:
+    hello.txt: Hello world!

@@ -11,6 +11,18 @@ and file/directory contents).
 **NOTE: ``climactic`` is a Python 3.4+ package**
 
 
+### Hello, World!
+
+    ---
+    # A very simple test!
+    
+    - run: >
+        echo Hello world!
+    
+    - assert-output: >
+        Hello world!
+
+
 ### Features
 - Aggregate tests recursively in a directory matching the
   pattern ``test_*.yml`` using the commandline tool
@@ -62,7 +74,7 @@ After installation, the following should work out of the box:
     OK
 
 
-To explore the full features of ``climactic``,
+To begin exploring all of the features of ``climactic``,
 create a new directory and add the test file
 ``test_git_init.yml``:
 
@@ -106,14 +118,20 @@ create a new directory and add the test file
           ref: refs/heads/master
 
 
-Now run:
+Now run ``climactic``:
 
-    ~/climactic/examples$ climactic
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.029s
     
     OK
+
+
+## Author
+
+[Brian Jorgensen](brian.jorgensen+climactic@gmail.com)
+
+[LinkedIn](https://www.linkedin.com/in/briangregoryjorgensen)
 
 
 ## License
@@ -130,9 +148,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-
-## Author
-
-[Brian Jorgensen](brian.jorgensen+climactic@gmail.com)
+# ...
 
 *Don't Take Any Wooden Nickels*

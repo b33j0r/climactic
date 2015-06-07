@@ -41,10 +41,30 @@ as development is very active):
 Either method will install the ``climactic`` python package
 as well as the ``climactic`` commandline utility.
 
+## Usage Examples
 
-## Usage Example
+After installation, the following should work out of the box:
 
-Create a test file ``test_git_init.yml``:
+    ~/climactic$ climactic examples -v 1
+    ..
+    ----------------------------------------------------------------------
+    Ran 2 tests in 0.016s
+
+    OK
+    
+    ~/climactic$ climactic examples -v 2
+    examples/test_hello.yml ... ok
+    examples/git/test_init.yml ... ok
+    
+    ----------------------------------------------------------------------
+    Ran 2 tests in 0.017s
+
+    OK
+
+
+To explore the full features of ``climactic``,
+create a new directory and add the test file
+``test_git_init.yml``:
 
     ---
     # Run `git init` and verify
@@ -86,7 +106,7 @@ Create a test file ``test_git_init.yml``:
           ref: refs/heads/master
 
 
-``cd`` to a directory containing this file and run:
+Now run:
 
     ~/climactic/examples$ climactic
     .

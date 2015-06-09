@@ -34,7 +34,7 @@ PROJECT_AUTHOR = "Brian Jorgensen <brian.jorgensen@gmail.com>"
 
 PROJECT_COPYRIGHT_YEAR = "2015"
 
-PROJECT_VERSION = '0.2.1'
+PROJECT_VERSION = '0.2.2'
 
 PROJECT_URL = 'https://github.com/b33j0r/climactic'
 
@@ -54,6 +54,7 @@ NOTE: climactic is a Python 3 package
 
 Features
 
+* Pytest support
 * Aggregate tests recursively in a directory matching the pattern "test_*.yml" using the commandline tool `climactic`
 * Compatibility with the standard `unittest` package
 * Tests are run in a temporary directory to avoid data loss and path-dependent results

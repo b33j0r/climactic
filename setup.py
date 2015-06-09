@@ -64,5 +64,13 @@ setup(
         'console_scripts': [
             'climactic=climactic.cli:main'
         ],
+        'pytest11': [
+            'pytest-climactic=climactic.plugins.pytest'
+        ]
+    },
+    extras_require={
+        'pytest': [
+            "pytest>=2.7.1"
+        ]
     }
 )

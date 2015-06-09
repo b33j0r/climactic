@@ -25,6 +25,7 @@ setup(
     version=PROJECT_VERSION,
     packages=[
         'climactic',
+        'climactic.test',
         'climactic.plugins'
     ],
     url=PROJECT_URL,

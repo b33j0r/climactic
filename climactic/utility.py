@@ -44,4 +44,3 @@ def substitute_env_vars(s, environ=None):
     """
     environ = environ or os.environ
     return string.Template(s).safe_substitute(environ)
-

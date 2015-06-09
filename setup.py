@@ -20,14 +20,6 @@ def read(rel_path):
     ).read()
 
 
-def read_requirements():
-    return [
-        p.strip() for p in read(
-            "requirements.txt"
-        ).split("\n") if p.strip()
-    ]
-
-
 setup(
     name='climactic',
     version=PROJECT_VERSION,
@@ -41,7 +33,6 @@ setup(
     author_email='brian.jorgensen@gmail.com',
     description=PROJECT_DESCRIPTION,
     long_description=PROJECT_LONG_DESCRIPTION,
-    install_requires=read_requirements(),
     keywords=[
         'testing',
         'cli',
@@ -68,6 +59,9 @@ setup(
             'pytest-climactic=climactic.plugins.pytest'
         ]
     },
+    install_requires=[
+        "PyYAML==3.11"
+    ],
     extras_require={
         'pytest': [
             "pytest>=2.7.1"

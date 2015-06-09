@@ -8,28 +8,47 @@ from pathlib import Path
 from climactic.case import CliTestCase
 
 
-def pytest_collect_file(parent, path):
-    if path.ext == ".yml" and path.basename.startswith("test"):
-        return YamlFile(path, parent)
+def pytest_addoption(parser):
+    parser.addini(
+        "climactic_files",
+        help="The file pattern used "
+             "to collect climactic test files",
+        default="test_*.yml"
+    )
 
-class YamlFile(pytest.File):
+
+def pytest_configure(config):
+    pattern = config.getini("climactic_files")
+    plugin = ClimacticPytestPlugin(pattern)
+    config.pluginmanager.register(plugin)
+
+
+class ClimacticPytestPlugin:
+    def __init__(self, pattern):
+        self.pattern = pattern
+
+    def pytest_collect_file(self, parent, path):
+        if path.fnmatch(self.pattern):
+            return ClimacticPytestFile(path, parent)
+
+
+class ClimacticPytestFile(pytest.File):
     def collect(self):
         path = Path(str(self.fspath))
         self.climactic_case = CliTestCase.from_path(
             path,
             Path(str(self.parent.fspath))
         )
-        yield from [
-            YamlItem(
-                path.parts[-1],
-                self.parent,
-                self.climactic_case
-            )
-        ]
+        yield ClimacticPytestItem(
+            path.parts[-1],
+            self,
+            self.climactic_case
+        )
 
-class YamlItem(pytest.Item):
+
+class ClimacticPytestItem(pytest.Item):
     def __init__(self, name, parent, climactic_case):
-        super(YamlItem, self).__init__(name, parent)
+        super(ClimacticPytestItem, self).__init__(name, parent)
         self.ccase = climactic_case
 
     def runtest(self):

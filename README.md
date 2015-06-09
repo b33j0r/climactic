@@ -37,6 +37,7 @@ Run the test runner:
 
 
 ### Features
+- **Pytest support! (experimental)**
 - Aggregate tests recursively in a directory matching the
   pattern ``test_*.yml`` using the commandline tool
   ``climactic``

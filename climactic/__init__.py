@@ -54,6 +54,7 @@ NOTE: climactic is a Python 3 package
 
 Features
 
+* Pytest integration via an automatically registered plugin
 * Aggregate tests recursively in a directory matching the pattern "test_*.yml" using the commandline tool `climactic`
 * Compatibility with the standard `unittest` package
 * Tests are run in a temporary directory to avoid data loss and path-dependent results

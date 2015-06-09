@@ -8,6 +8,12 @@ written as YAML files which specify the commands to run
 along with assertions about the output (currently, stdout
 and file/directory contents).
 
+It is written in Python 3, but it can be used for testing
+any kind of shell-based application using just the
+`climactic` utility and your test files (by default,
+files matching `**/test_*.yml`).
+
+
 **NOTE: ``climactic`` is a Python 3.4+ package**
 
 
@@ -26,7 +32,7 @@ So, what does this actually look like? We try to keep it simple.
     - assert-output: >
         Hello world!
 
-Run the test runner:
+Run the `climactic` test runner:
 
     ~$ climactic test_hello.yml
     .
@@ -35,9 +41,22 @@ Run the test runner:
     
     OK
 
+If you want to use it with existing unit tests via `py.test`:
+
+    ~/climacticpytest$ py.test
+    ================= test session starts ==================
+    platform darwin -- Python 3.4.2 -- py-1.4.28 -- pytest-2.7.1
+    rootdir: /Users/brjorgensen/climacticpytest/climacticpytest, inifile:
+    plugins: climactic
+    collected 2 items
+    
+    test_hello.yml .
+    test_other_thing.py .
+    
+    =============== 2 passed in 0.01 seconds ===============
 
 ### Features
-- **Pytest support! (experimental)**
+- **(experimental)** Pytest integration via an automatically registered plugin
 - Aggregate tests recursively in a directory matching the
   pattern ``test_*.yml`` using the commandline tool
   ``climactic``
@@ -54,19 +73,20 @@ Run the test runner:
 
 ## Install
 
-Let's just go ahead and do this--at some point you'll be
-glad you did :p
+``climactic`` is registered in PyPI, so you can use pip:
 
-To use the most recent source code (recommended at this time,
-as development is very active):
+    pip install climactic
+
+Or (not necessary if you aren't using `py.test`, or already
+have an up-to-date `pytest`):
+
+    pip install climactic[pytest]
+
+To use the most recent source code:
 
     virtualenv -p python3 climactic_venv
     source climactic_venv/bin/activate
     pip install -U -e git+https://github.com/b33j0r/climactic.git#egg=climactic
-
-``climactic`` is registered in PyPI, so pip works too:
-
-    pip install climactic
 
 Either method will install the ``climactic`` python package
 as well as the ``climactic`` commandline utility.
@@ -118,9 +138,9 @@ to ``~/climactic``):
 
     ~$ cd climactic
     ~/climactic$ climactic examples -v 1
-    ..
+    ...
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.016s
+    Ran 3 tests in 0.016s
 
     OK
 

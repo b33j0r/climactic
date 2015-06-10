@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 """
 """
+import sys
 import argparse
 import textwrap
 import logging
@@ -64,6 +65,7 @@ parser.add_argument(
 
 
 def main(*args):
+    args = args or sys.argv[1:]
     namespace = parser.parse_args(args)
     try:
         result = CliTestRunner.run_in_dir(
@@ -78,5 +80,4 @@ def main(*args):
 
 
 if __name__ == "__main__":
-    import sys
     main(*(sys.argv[:1]))

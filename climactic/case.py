@@ -7,7 +7,7 @@ import yaml
 from pathlib import Path
 from yaml.scanner import ScannerError
 
-from climactic.commands import CommandFactory
+from climactic.commands import CommandFactory, Command
 from climactic.errors import ClimacticUserError
 from climactic.utility import cd_temp_dir
 
@@ -31,7 +31,12 @@ class CliTestCase(unittest.TestCase):
         path = Path(path)
         with path.open() as f:
             try:
-                task_list = yaml.load(f)
+                for task_list in yaml.load_all(f):
+                    yield cls(
+                        task_list,
+                        path=path,
+                        base_path=base_path
+                    )
             except ScannerError as exc:
                 raise ClimacticUserError(
                     (
@@ -46,11 +51,6 @@ class CliTestCase(unittest.TestCase):
                         exc.problem_mark
                     )
                 )
-        return cls(
-            task_list,
-            path=path,
-            base_path=base_path
-        )
 
     def __init__(self, task_list, path=None, base_path=None):
         super().__init__()
@@ -73,6 +73,9 @@ class CliTestCase(unittest.TestCase):
             )
 
         for task_dict in task_list:
+            if isinstance(task_dict, Command):
+                self.commands.append(task_dict)
+                return
             if not isinstance(task_dict, dict):
                 raise RuntimeError(
                     ("Parse error in {} "

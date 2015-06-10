@@ -8,3 +8,15 @@
 
 - assert-file-utf8:
     hello.txt: Hello world!
+
+---
+# A simple test which writes to a file
+
+- !write-file-utf8
+    hello2.txt: Hello world, again!
+
+- !assert-output >
+    ""
+
+- !assert-file-utf8
+    hello2.txt: Hello world, again!

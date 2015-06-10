@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+import ez_setup
+ez_setup.use_setuptools()
+
 import os
 
 from setuptools import setup
@@ -63,6 +66,9 @@ setup(
     },
     install_requires=[
         "PyYAML==3.11"
+    ],
+    tests_require=[
+        "pytest>=2.7.1"
     ],
     extras_require={
         'pytest': [

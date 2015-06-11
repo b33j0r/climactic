@@ -227,53 +227,6 @@ Now run ``climactic``:
 ([LinkedIn](https://www.linkedin.com/in/briangregoryjorgensen))
 
 
-## Historical Notes
-
-This project was created on June 4, 2015. It was created in the
-context of "how do I test a command-line utility in a concise
-yet expressive manner?"
-
-The YAML syntax is inspired by the author seeing successful
-applications of ansible and docker. Yet, there are a few small
-inconsistencies which deserve some explanation...
-
-#### Command vs. Task
-
-tl;dr: You probably only need to know this if you uncover a
-defect, contribute a pull request, or fork the repository.
-But hey, I documented it! ``--BJ 06/07/15``
-
-A lot of what we do as coders is come up with names for our
-constructs. I plan to define these terms more narrowly in
-the near future, but here is the current state of things
-in this codebase:
-
-**task**: input that is specified in parallel within an
-          associative array (``dict``):
-
-    do_this: ...
-    do_this_maybe_before_or_after: ...
-
-**command**: input that is specified in an ordered array
-             (``list``):
-    
-    - do_the_first_thing
-        parameter_a: ...
-        parameter_b: ...
-        ...
-    - do_the_second_thing
-        ...
-
-From a design perspective, everything that results in the
-instantiation of a ``Command`` object will eventually have a
-sensible name. But at this moment, you might see a bit of this.
-
-The ambiguity arises from the flexible structure of YAML. I am
-open to suggestions; I hadn't thought about it much until I
-noticed after release that the mix of the terms *task* and
-*command* was a bit confusing.
-
-
 ## License
 
 - Copyright (C) 2015  Brian Jorgensen

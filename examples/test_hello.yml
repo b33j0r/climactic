@@ -1,8 +1,8 @@
 ---
 # A very simple test!
 
-- run: >
+- !run >
     echo Hello world!
 
-- assert-output: >
+- !assert-output >
     Hello world!

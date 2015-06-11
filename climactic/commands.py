@@ -5,13 +5,17 @@ top-level of an input test YAML file.
 """
 
 import os
+import traceback
 import subprocess
 import logging
 from pathlib import Path
 from abc import ABCMeta, abstractmethod
-import traceback
+
+import yaml
+from yaml.constructor import ConstructorError
 
 from climactic.utility import substitute_env_vars
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +39,35 @@ class CommandFactory:
     @classmethod
     def register_command(cls, command_cls):
         cls._command_registry[command_cls.NAME] = command_cls
+
+        # support YAML command syntax
+        def yaml_constructor(loader, node):
+            try:
+                ctor = command_cls.yaml_constructor
+            except AttributeError:
+                ctor = cls.default_yaml_constructor
+            spec = ctor(loader, node)
+            return command_cls(spec)
+
+        yaml.add_constructor(
+            "!" + command_cls.NAME,
+            yaml_constructor
+        )
+
+    @classmethod
+    def default_yaml_constructor(cls, loader, node):
+        try:
+            return loader.construct_mapping(node)
+        except ConstructorError:
+            pass
+        try:
+            return loader.construct_sequence(node)
+        except ConstructorError:
+            pass
+        try:
+            return loader.construct_scalar(node)
+        except ConstructorError:
+            raise
 
     @classmethod
     def build_command(cls, command_name, spec):
@@ -115,7 +148,6 @@ class EnvCommand(Command):
     """
     Exports environment variables.
     """
-
     NAME = "env"
 
     def __init__(self, spec):
@@ -277,7 +309,7 @@ class AssertFileUtf8Command(Command):
 
     def run(self, state, case):
         for file_path, expected in self.data.items():
-            file_path = Path(file_path).resolve()
+            file_path = Path(file_path)
             case.assertTrue(file_path.exists())
             with file_path.open() as f:
                 actual = f.read()

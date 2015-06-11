@@ -35,21 +35,24 @@ class ClimacticPytestPlugin:
 class ClimacticPytestFile(pytest.File):
     def collect(self):
         path = Path(str(self.fspath))
-        self.climactic_case = CliTestCase.from_path(
+        for climactic_case in CliTestCase.from_path(
             path,
             Path(str(self.parent.fspath))
-        )
-        yield ClimacticPytestItem(
-            path.parts[-1],
-            self,
-            self.climactic_case
-        )
+        ):
+            yield ClimacticPytestItem(
+                self.fspath.basename,
+                self,
+                climactic_case
+            )
 
 
 class ClimacticPytestItem(pytest.Item):
     def __init__(self, name, parent, climactic_case):
         super(ClimacticPytestItem, self).__init__(name, parent)
         self.ccase = climactic_case
+
+    def reportinfo(self):
+        return self.fspath, None, self.fspath.basename[:-4]
 
     def runtest(self):
         self.ccase.runTest()

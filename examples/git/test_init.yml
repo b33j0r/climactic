@@ -1,8 +1,9 @@
+#!yaml
 ---
 # Run `git init` and verify that the expected directory
 # structure and file contents are produced.
 
-- env:
+- !env
     CMD: git
     CMD_NAME: Git
     REPO_DIR: .git/
@@ -15,7 +16,7 @@
     Initialized empty ${CMD_NAME}
     repository in ${CWD}/${REPO_DIR}
 
-- assert-tree:
+- !assert-tree
     .git:
     - HEAD
     - objects:

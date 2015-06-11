@@ -30,10 +30,10 @@ class CliTestSuite(unittest.TestSuite):
                 tests.extend(target_tests)
 
             else:
-                target_test = cls.collect_file(
+                for target_test in cls.collect_file(
                     target_path
-                )
-                tests.append(target_test)
+                ):
+                    tests.append(target_test)
         suite.addTests(tests)
         return suite
 
@@ -52,11 +52,11 @@ class CliTestSuite(unittest.TestSuite):
         )
 
         for target_path in target_paths:
-            test = cls.collect_file(
+            for test in cls.collect_file(
                 target_path,
                 base_path=dir_path
-            )
-            tests.append(test)
+            ):
+                tests.append(test)
         return tests
 
     @classmethod
@@ -65,8 +65,7 @@ class CliTestSuite(unittest.TestSuite):
             "Loading yml file %r",
             target_path
         )
-        test = CliTestCase.from_path(
+        yield from CliTestCase.from_path(
             target_path,
             base_path=base_path
         )
-        return test

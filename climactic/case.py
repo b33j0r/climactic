@@ -3,12 +3,11 @@
 """
 import logging
 import unittest
-import yaml
 from pathlib import Path
-from yaml.scanner import ScannerError
 
-from climactic.commands import CommandFactory, Command
-from climactic.errors import ClimacticUserError
+from climactic.command import Command
+from climactic.tag import TagFactory
+from climactic.parser import Parser
 from climactic.utility import cd_temp_dir
 
 
@@ -29,38 +28,25 @@ class CliTestCase(unittest.TestCase):
         :return (CliTestCase):
         """
         path = Path(path)
-        with path.open() as f:
-            try:
-                for task_list in yaml.load_all(f):
-                    yield cls(
-                        task_list,
-                        path=path,
-                        base_path=base_path
-                    )
-            except ScannerError as exc:
-                raise ClimacticUserError(
-                    (
-                        "Invalid YAML syntax"
-                        "\n{}\n{}\n{}"
-                    ).format(
-                        exc.context_mark,
-                        exc.problem.replace(
-                            "could not found",
-                            "could not find"
-                        ),
-                        exc.problem_mark
-                    )
-                )
+        parser = Parser()
+        for task_list in parser.iparse_file(path):
+            yield cls(
+                task_list,
+                path=path,
+                base_path=base_path
+            )
 
     def __init__(self, task_list, path=None, base_path=None):
         super().__init__()
         self.commands = []
         self.path = Path(path)
+
         if path and not base_path:
             raise ValueError(
                 "base_path must be specified "
                 "when path is specified"
             )
+
         self.base_path = Path(base_path)
 
         if not isinstance(task_list, list):
@@ -73,9 +59,11 @@ class CliTestCase(unittest.TestCase):
             )
 
         for task_dict in task_list:
+
             if isinstance(task_dict, Command):
                 self.commands.append(task_dict)
-                return
+                continue
+
             if not isinstance(task_dict, dict):
                 raise RuntimeError(
                     ("Parse error in {} "
@@ -84,26 +72,20 @@ class CliTestCase(unittest.TestCase):
                         path or "<unknown>"
                     )
                 )
-            commands = CommandFactory.build_commands(task_dict)
+
+            commands = TagFactory.build_tags(task_dict)
             self.commands.extend(commands)
 
     def runTest(self):
         with cd_temp_dir():
-            logger.debug("setup")
-            for command in self.commands:
-                command.setup(None)
-
-            logger.debug("run")
             for command in self.commands:
                 command.run(None, self)
 
-            logger.debug("teardown")
-            for command in self.commands:
-                command.teardown(None)
-
     def __str__(self):
         if self.base_path:
-            return str(self.path.relative_to(
-                self.base_path
-            ))
+            return str(
+                self.path.relative_to(
+                    self.base_path
+                )
+            )
         return str(self.path)

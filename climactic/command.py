@@ -5,17 +5,13 @@ top-level of an input test YAML file.
 """
 
 import os
-import traceback
 import subprocess
 import logging
 from pathlib import Path
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
-import yaml
-from yaml.constructor import ConstructorError
-
+from climactic.tag import Tag
 from climactic.utility import substitute_env_vars
-
 
 logger = logging.getLogger(__name__)
 
@@ -23,101 +19,14 @@ logger = logging.getLogger(__name__)
 ENV = os.environ.copy()
 
 
-class CommandFactory:
-
-    """
-    Static class; aggregates defined commands, and employs
-    the abstract factory pattern to create concrete instances
-    of `Command` objects.
-
-    Generally, `command_name` is parsed directly from the
-    input YAML and associated with a subclass of `Command`.
-    """
-
-    _command_registry = {}
-
-    @classmethod
-    def register_command(cls, command_cls):
-        cls._command_registry[command_cls.NAME] = command_cls
-
-        # support YAML command syntax
-        def yaml_constructor(loader, node):
-            try:
-                ctor = command_cls.yaml_constructor
-            except AttributeError:
-                ctor = cls.default_yaml_constructor
-            spec = ctor(loader, node)
-            return command_cls(spec)
-
-        yaml.add_constructor(
-            "!" + command_cls.NAME,
-            yaml_constructor
-        )
-
-    @classmethod
-    def default_yaml_constructor(cls, loader, node):
-        try:
-            return loader.construct_mapping(node)
-        except ConstructorError:
-            pass
-        try:
-            return loader.construct_sequence(node)
-        except ConstructorError:
-            pass
-        try:
-            return loader.construct_scalar(node)
-        except ConstructorError:
-            raise
-
-    @classmethod
-    def build_command(cls, command_name, spec):
-        try:
-            cmd_cls = cls._command_registry[command_name]
-            return cmd_cls(spec)
-        except KeyError:
-            logger.error(
-                "Command %r is not defined", command_name
-            )
-        except TypeError:
-            logger.error(
-                (
-                    "Command %r is not "
-                    "implemented correctly\n\n"
-                    "%s"
-                ), command_name, traceback.format_exc()
-            )
-        exit(1)
-
-    @classmethod
-    def build_commands(cls, task_dict):
-        commands = []
-        for command_name, spec in task_dict.items():
-            logger.debug(
-                "Registered command %r", command_name
-            )
-            command = cls.build_command(command_name, spec)
-            commands.append(command)
-        return commands
-
-
-class CommandMeta(ABCMeta):
-
-    """
-    Used to automatically register all `Command` subclasses
-    """
-
-    def __init__(cls, cls_name, bases=None, dct=None):
-        if cls_name != "Command":
-            CommandFactory.register_command(cls)
-        super().__init__(cls_name, bases, dct)
-
-
-class Command(metaclass=CommandMeta):
+class Command(Tag):
 
     """
     Base class for all commands that can be used in
     test YAML files
     """
+
+    is_abstract = True
 
     @abstractmethod
     def run(self, state, case):
@@ -126,20 +35,6 @@ class Command(metaclass=CommandMeta):
 
         :param state (CliTestCaseState):
         :param case (unittest.TestCase):
-        """
-
-    def setup(self, state):
-        """
-        Called on each command before any are run.
-
-        :param state (CliTestCaseState):
-        """
-
-    def teardown(self, state):
-        """
-        Called on each command after all have been run.
-
-        :param state (CliTestCaseState):
         """
 
 
@@ -264,7 +159,9 @@ class AssertTreeCommand(Command):
         if root is None:
             root = Path()
         if isinstance(spec, str):
-            return [(root/spec, "file")]
+            return [
+                (root/spec, "file")
+            ]
         if isinstance(spec, list):
             return self._parse_paths_list(root, spec)
         if isinstance(spec, dict):

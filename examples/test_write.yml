@@ -16,7 +16,6 @@
     hello2.txt: Hello world, again!
 
 - !assert-output >
-    ""
 
 - !assert-file-utf8
     hello2.txt: Hello world, again!

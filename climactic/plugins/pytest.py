@@ -52,7 +52,7 @@ class ClimacticPytestItem(pytest.Item):
         self.ccase = climactic_case
 
     def reportinfo(self):
-        return self.fspath, None, self.fspath.basename[:-4]
+        return self.fspath, None, str(self.ccase)
 
     def runtest(self):
         self.ccase.runTest()

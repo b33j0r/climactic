@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from climactic.command import Command
-from climactic.tag import TagFactory
+from climactic.tag import TagFactory, Tag
 from climactic.parser import Parser
 from climactic.utility import cd_temp_dir
 
@@ -36,7 +36,7 @@ class CliTestCase(unittest.TestCase):
                 base_path=base_path
             )
 
-    def __init__(self, task_list, path=None, base_path=None):
+    def __init__(self, tags, path=None, base_path=None):
         super().__init__()
         self.commands = []
         self.path = Path(path)
@@ -49,7 +49,7 @@ class CliTestCase(unittest.TestCase):
 
         self.base_path = Path(base_path)
 
-        if not isinstance(task_list, list):
+        if not isinstance(tags, list):
             raise RuntimeError(
                 ("Parse error in {} "
                  "(YAML file does not evaluate "
@@ -58,13 +58,21 @@ class CliTestCase(unittest.TestCase):
                 )
             )
 
-        for task_dict in task_list:
+        for tag_or_dict in tags:
 
-            if isinstance(task_dict, Command):
-                self.commands.append(task_dict)
+            if isinstance(tag_or_dict, Command):
+                self.commands.append(tag_or_dict)
                 continue
 
-            if not isinstance(task_dict, dict):
+            if isinstance(tag_or_dict, Tag):
+                setattr(
+                    self,
+                    tag_or_dict.NAME,
+                    tag_or_dict.value
+                )
+                continue
+
+            if not isinstance(tag_or_dict, dict):
                 raise RuntimeError(
                     ("Parse error in {} "
                      "(YAML for task does not evaluate "
@@ -73,7 +81,7 @@ class CliTestCase(unittest.TestCase):
                     )
                 )
 
-            commands = TagFactory.build_tags(task_dict)
+            commands = TagFactory.build_tags(tag_or_dict)
             self.commands.extend(commands)
 
     def runTest(self):
@@ -82,6 +90,9 @@ class CliTestCase(unittest.TestCase):
                 command.run(None, self)
 
     def __str__(self):
+        name = getattr(self, "name", None)
+        if name:
+            return name
         if self.base_path:
             return str(
                 self.path.relative_to(

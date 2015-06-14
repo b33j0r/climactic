@@ -19,7 +19,15 @@ class ClimacticUserError(ClimacticError):
     """
 
 
-class ClimacticTestSyntaxError(ClimacticError):
+class ClimacticSyntaxError(ClimacticUserError):
+
+    """
+    Something was wrong with user input
+    in a test file (.yml).
+    """
+
+
+class ClimacticUnknownTagError(ClimacticSyntaxError):
 
     """
     Something was wrong with user input

@@ -2,9 +2,9 @@
 import ez_setup
 ez_setup.use_setuptools()
 
-import os
 
 from setuptools import setup
+
 
 from climactic import (
     PROJECT_URL,
@@ -12,15 +12,6 @@ from climactic import (
     PROJECT_DESCRIPTION,
     PROJECT_LONG_DESCRIPTION
 )
-
-
-project_dir = os.path.dirname(__file__)
-
-
-def read(rel_path):
-    return open(
-        os.path.join(project_dir, rel_path)
-    ).read()
 
 
 setup(

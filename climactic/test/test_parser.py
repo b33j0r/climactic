@@ -5,7 +5,11 @@ import pytest
 from collections import Sequence
 from io import StringIO
 from climactic import command
-from climactic.errors import ClimacticUserError
+from climactic import tag
+from climactic.errors import (
+    ClimacticSyntaxError,
+    ClimacticUnknownTagError
+)
 from climactic.parser import Parser
 
 
@@ -48,7 +52,15 @@ def test_parse_scanner_error():
     """
     """
     yaml_str = "#!yaml\n---\n- stuff\n-other-stuff\n---\n"
-    with pytest.raises(ClimacticUserError):
+    with pytest.raises(ClimacticSyntaxError):
+        parse_str(yaml_str)
+
+
+def test_parse_constructor_error():
+    """
+    """
+    yaml_str = "#!yaml\n---\n!other-stuff"
+    with pytest.raises(ClimacticUnknownTagError):
         parse_str(yaml_str)
 
 
@@ -58,6 +70,7 @@ def test_parse_one_simple_test_with_dict_syntax():
     yaml_str = """
 #!yaml
 ---
+- name: Name
 - run: >
     echo Hello world!
 
@@ -67,9 +80,13 @@ def test_parse_one_simple_test_with_dict_syntax():
     tests = parse_str(yaml_str)
     assert len(tests) == 1
     test = tests[0]
-    assert len(test) == 2
-    assert isinstance(test[0], command.RunCommand)
-    assert isinstance(test[1], command.AssertOutputCommand)
+    assert len(test) == 3
+    assert isinstance(test[0], tag.NameTag)
+    assert test[0].value == "Name"
+    assert isinstance(test[1], command.RunCommand)
+    assert test[1].cmd_lines == ["echo Hello world!"]
+    assert isinstance(test[2], command.AssertOutputCommand)
+    assert test[2].template.strip() == "Hello world!"
 
 
 def test_parse_one_simple_test_with_tag_syntax():

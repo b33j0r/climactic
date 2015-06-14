@@ -1,14 +1,19 @@
 #! /usr/bin/env python
 """
 """
-
-import yaml
-from collections import Mapping, Sequence
 from pprint import pformat
 from pathlib import Path
+from collections import Mapping, Sequence
+
+import yaml
+from yaml.constructor import ConstructorError
 from yaml.scanner import ScannerError
+
 from climactic.tag import Tag, TagFactory
-from climactic.errors import ClimacticUserError
+from climactic.errors import (
+    ClimacticSyntaxError,
+    ClimacticUnknownTagError
+)
 
 
 class Parser:
@@ -68,7 +73,7 @@ class Parser:
                     continue
                 yield self.parse_document(document)
         except ScannerError as exc:
-            msg = ("Invalid YAML syntax"
+            msg = ("Invalid YAML syntax in input file"
                    "\n{}\n{}\n{}").format(
                 exc.context_mark,
                 exc.problem.replace(
@@ -76,7 +81,14 @@ class Parser:
                     "could not find"),
                 exc.problem_mark
             )
-            raise ClimacticUserError(msg)
+            raise ClimacticSyntaxError(msg)
+        except ConstructorError as exc:
+            msg = ("Unknown YAML tag in input file"
+                   "\n{}\n{}").format(
+                exc.problem,
+                exc.problem_mark
+            )
+            raise ClimacticUnknownTagError(msg)
 
     def parse_stream(self, stream):
         """
@@ -98,7 +110,11 @@ class Parser:
         if isinstance(document, Mapping):
             return self.parse_document_mapping(document)
         raise ValueError(
-            "Cannot parse a document of type {}".format(
+            (
+                "Cannot parse a document of type {} "
+                "(did you forget '- ' before the first "
+                "tag in the file?)"
+            ).format(
                 document.__class__.__name__
             )
         )

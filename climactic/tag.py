@@ -110,3 +110,15 @@ class Tag(metaclass=TagMeta):
     """
 
     is_abstract = True
+
+
+class NameTag(Tag):
+
+    """
+    """
+
+    NAME = "name"
+
+    def __init__(self, spec):
+        assert isinstance(spec, str)
+        self.value = spec

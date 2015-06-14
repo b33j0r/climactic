@@ -3,17 +3,56 @@
 # Run `git init` and verify that the expected directory
 # structure and file contents are produced.
 
+- !name "git init"
+
 - !env
     CMD: git
     CMD_NAME: Git
     REPO_DIR: .git/
 
-- run: |                 # '|' specifies verbatim string input
+# '|' specifies verbatim string input
+- run: |
     ${CMD} init
 
-- assert-output: >       # '<' specifies folded-style input, meaning newlines are removed
+# '<' specifies folded-style input,
+# meaning newlines are removed
+- assert-output: >
 
     Initialized empty ${CMD_NAME}
+    repository in ${CWD}/${REPO_DIR}
+
+- !assert-tree
+    .git:
+    - HEAD
+    - objects:
+    - refs:
+      - heads:
+      - tags:
+
+- assert-file-utf8:
+    .git/HEAD: |
+      ref: refs/heads/master
+
+---
+# Run `git init` twice and verify that the expected directory
+# structure and file contents are produced.
+
+- !name git reinitialize
+
+- !env
+    CMD: git
+    CMD_NAME: Git
+    REPO_DIR: .git/
+
+- run: |
+    ${CMD} init
+
+- run: |
+    ${CMD} init
+
+- assert-output: >
+
+    Reinitialized existing ${CMD_NAME}
     repository in ${CWD}/${REPO_DIR}
 
 - !assert-tree

@@ -48,8 +48,10 @@ class ClimacticPytestFile(pytest.File):
 
 class ClimacticPytestItem(pytest.Item):
     def __init__(self, name, parent, climactic_case):
-        super(ClimacticPytestItem, self).__init__(name, parent)
         self.ccase = climactic_case
+        super(ClimacticPytestItem, self).__init__(
+            str(self.ccase), parent
+        )
 
     def reportinfo(self):
         return self.fspath, None, str(self.ccase)

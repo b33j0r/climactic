@@ -2,36 +2,42 @@
 """
 """
 import os
+import pathlib
 import string
 import tempfile
-import shutil
 import logging
-from contextlib import contextmanager
 
 
 logger = logging.getLogger(__name__)
 
 
-@contextmanager
-def cd_temp_dir():
+class ClimacticTempDir(tempfile.TemporaryDirectory):
+
     """
     Changes the current working directory to a temporary
     directory and deletes it after the context manager
-    exits.
+    exits. Also sets the restores the CWD environment
+    variable.
+
+    NOTE: also yields a pathlib.Path object instead of
+          a string
     """
-    original_cwd = os.getcwd()
-    temp_dir_path = tempfile.mkdtemp()
-    os.chdir(temp_dir_path)
-    os.environ["CWD"] = os.getcwd()
-    assert os.environ["CWD"] != original_cwd
-    logger.debug("Created temp dir %r", temp_dir_path)
-    try:
-        yield temp_dir_path
-    finally:
-        os.chdir(original_cwd)
+
+    def __enter__(self):
+        self.original_cwd = os.getcwd()
+        self.original_cwd_var = os.environ.get("CWD")
+        val = super().__enter__()
+        os.chdir(val)
         os.environ["CWD"] = os.getcwd()
-        shutil.rmtree(temp_dir_path)
-        logger.debug("Deleted temp dir %r", temp_dir_path)
+        return pathlib.Path(val).resolve()
+
+    def __exit__(self, exc, value, tb):
+        os.chdir(self.original_cwd)
+        if self.original_cwd_var is None:
+            del os.environ["CWD"]
+        else:
+            os.environ["CWD"] = self.original_cwd_var
+        super().__exit__(exc, value, tb)
 
 
 def substitute_env_vars(s, environ=None):

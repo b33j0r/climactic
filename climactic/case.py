@@ -8,7 +8,7 @@ from pathlib import Path
 from climactic.command import Command
 from climactic.tag import TagFactory, Tag
 from climactic.parser import Parser
-from climactic.utility import cd_temp_dir
+from climactic.utility import ClimacticTempDir
 
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ class CliTestCase(unittest.TestCase):
             self.commands.extend(commands)
 
     def runTest(self):
-        with cd_temp_dir():
+        with ClimacticTempDir():
             for command in self.commands:
                 command.run(None, self)
 

@@ -1,5 +1,8 @@
 #! /usr/bin/env python
 """
+``climactic.assertion``
+-----------------------
+
 Assertions are commands used to test a condition,
 such as the existence of a file, the output of
 the last command, etc. Assertions are executed in

@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 """
+``climactic.command``
+---------------------
+
+
 Defines the commands that can be used at the
 top-level of an input test YAML file. Commands
 are executed in order and "do something".
@@ -34,7 +38,8 @@ class Command(Tag):
         """
         Does the thing the subclass says it will do!
 
-        :param state (CliTestCaseState):
+        :param state:
+        :type state CliTestCaseState:
         :param case (unittest.TestCase):
         """
 

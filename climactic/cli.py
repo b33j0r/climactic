@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 """
+``climactic.cli``
+-----------------
+
+
 """
 import sys
 import argparse

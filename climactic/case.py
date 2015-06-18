@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 """
+``climactic.case``
+------------------
+
+
 """
 import logging
 import unittest

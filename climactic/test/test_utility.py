@@ -64,6 +64,11 @@ fixture_temp_dir = None
 
 
 def test_temp_dir_pytest_fixture(request, temp_dir):
+    """
+    This is a condensed version of the tests above which
+    tests the `temp_dir` pytest fixture defined in
+    conftest.py.
+    """
     assert isinstance(temp_dir, pathlib.Path)
     assert temp_dir.exists()
     temp_root = pathlib.Path(tempfile.gettempdir()).resolve()

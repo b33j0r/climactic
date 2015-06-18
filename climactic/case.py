@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from climactic.command import Command
+import climactic.assertion  # noqa
 from climactic.tag import TagFactory, Tag
 from climactic.parser import Parser
 from climactic.utility import ClimacticTempDir

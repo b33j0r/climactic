@@ -2,10 +2,12 @@
 """
 """
 import pytest
-from collections import Sequence
 from io import StringIO
+from collections import Sequence
+
 from climactic import command
 from climactic import tag
+import climactic.assertion
 from climactic.errors import (
     ClimacticSyntaxError,
     ClimacticUnknownTagError
@@ -85,7 +87,8 @@ def test_parse_one_simple_test_with_dict_syntax():
     assert test[0].value == "Name"
     assert isinstance(test[1], command.RunCommand)
     assert test[1].cmd_lines == ["echo Hello world!"]
-    assert isinstance(test[2], command.AssertOutputCommand)
+    assert isinstance(test[2],
+                      climactic.assertion.AssertOutputCommand)
     assert test[2].template.strip() == "Hello world!"
 
 
@@ -106,7 +109,8 @@ def test_parse_one_simple_test_with_tag_syntax():
     test = tests[0]
     assert len(test) == 2
     assert isinstance(test[0], command.RunCommand)
-    assert isinstance(test[1], command.AssertOutputCommand)
+    assert isinstance(test[1],
+                      climactic.assertion.AssertOutputCommand)
 
 
 def test_parse_one_simple_test_with_mixed_syntax():
@@ -126,7 +130,8 @@ def test_parse_one_simple_test_with_mixed_syntax():
     test = tests[0]
     assert len(test) == 2
     assert isinstance(test[0], command.RunCommand)
-    assert isinstance(test[1], command.AssertOutputCommand)
+    assert isinstance(test[1],
+                      climactic.assertion.AssertOutputCommand)
 
 
 def test_parse_two_simple_tests_with_mixed_syntax():
@@ -160,6 +165,7 @@ def test_parse_two_simple_tests_with_mixed_syntax():
     for test in tests:
         assert len(test) == 3
         assert isinstance(test[0], command.RunCommand)
-        assert isinstance(test[1], command.AssertOutputCommand)
+        assert isinstance(test[1],
+                          climactic.assertion.AssertOutputCommand)
         assert isinstance(test[2], command.EnvCommand)
         assert test[2].env == {"A": 1, "B": 2}

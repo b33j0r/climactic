@@ -1,6 +1,6 @@
 # ``climactic``
 
-**NEW!** [Project Documentation](http://climactic.readthedocs.org/en/latest)
+## [See the Project Documentation at ReadTheDocs.org](http://climactic.readthedocs.org/en/latest)
 
 *Testing commandline utilities*
 
@@ -58,7 +58,7 @@ If you want to use it with existing unit tests via `py.test`:
     =============== 2 passed in 0.01 seconds ===============
 
 ### Features
-- **(experimental)** Pytest integration via an automatically registered plugin
+- Pytest integration
 - Aggregate tests recursively in a directory matching the
   pattern ``test_*.yml`` using the commandline tool
   ``climactic``

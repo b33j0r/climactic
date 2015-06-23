@@ -1,5 +1,7 @@
 # ``climactic``
 
+**NEW!** [Project Documentation](http://climactic.readthedocs.org/en/latest)
+
 *Testing commandline utilities*
 
 A simple testing framework for running

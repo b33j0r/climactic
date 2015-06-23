@@ -1,5 +1,8 @@
 #! /usr/bin/env python
 """
+``climactic.tag``
+-----------------
+
 A tag is a more general concept than a command.
 It refers to any object which is parsed in input
 YAML. Commands are also tags.

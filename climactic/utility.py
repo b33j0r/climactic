@@ -1,5 +1,8 @@
 #! /usr/bin/env python
 """
+``climactic.utility``
+---------------------
+
 """
 import os
 import pathlib

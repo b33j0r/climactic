@@ -1,8 +1,35 @@
 #! /usr/bin/env python
 """
 climactic
+---------
+
 YAML-based tests for commandline utilities
 
+
+.. automodule:: climactic.assertion
+
+.. automodule:: climactic.case
+
+.. automodule:: climactic.cli
+
+.. automodule:: climactic.command
+
+.. automodule:: climactic.errors
+
+.. automodule:: climactic.parser
+
+.. automodule:: climactic.runner
+
+.. automodule:: climactic.state
+
+.. automodule:: climactic.suite
+
+.. automodule:: climactic.tag
+
+.. automodule:: climactic.utility
+
+License
+=======
 
 Copyright (C) 2015  Brian Jorgensen
 
@@ -34,7 +61,7 @@ PROJECT_AUTHOR = "Brian Jorgensen <brian.jorgensen@gmail.com>"
 
 PROJECT_COPYRIGHT_YEAR = "2015"
 
-PROJECT_VERSION = '0.3.0'
+PROJECT_VERSION = '0.3.1'
 
 PROJECT_URL = 'https://github.com/b33j0r/climactic'
 

@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 """
+``climactic.suite``
+-------------------
+
+
 """
 import logging
 import unittest

@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 """
+``climactic.parser``
+--------------------
+
+
 """
 from pprint import pformat
 from pathlib import Path

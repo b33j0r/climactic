@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 """
+Contains integrations with other platforms.
+Currently, this means Pytest.
 """
-
-if __name__ == "__main__":
-    pass

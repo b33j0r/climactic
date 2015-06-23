@@ -6,12 +6,11 @@
 Welcome to climactic's documentation!
 =====================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 3
 
    api
+   license
 
 Indices and tables
 ==================

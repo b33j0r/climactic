@@ -4,6 +4,13 @@ climactic
 ---------
 
 YAML-based tests for commandline utilities
+==========================================
+
+A simple testing framework for running shell commands and
+verifying their behavior. Tests are written as YAML files
+which specify the commands to run, along with assertions
+about the output (currently, stdout and file/directory
+contents).
 
 
 .. automodule:: climactic.assertion
@@ -28,28 +35,6 @@ YAML-based tests for commandline utilities
 
 .. automodule:: climactic.utility
 
-License
-=======
-
-Copyright (C) 2015  Brian Jorgensen
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the
-
-Free Software Foundation, Inc.
-51 Franklin Street, Fifth Floor
-Boston, MA
-02110-1301, USA.
 """
 
 import logging

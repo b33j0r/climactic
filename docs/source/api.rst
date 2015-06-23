@@ -1,4 +1,1 @@
-API
----
-
 .. automodule:: climactic

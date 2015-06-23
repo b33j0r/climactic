@@ -5,7 +5,9 @@ Install
 -------
 
 You need Python 3 to use ``climactic``. See the instructions
-for your platform at http://python.org. It is a good idea to
+for your platform at http://python.org.
+
+Once you have python 3 installed, it is a good idea to
 update your pip::
 
     pip3 install -U setuptools pip
@@ -36,8 +38,19 @@ contents::
     - !assert-output >
         Hello world!
 
-Now let's go through each part. The first line identifies
-the beginning of a YAML document::
+Now let's go through each part. By default, climactic
+searches for test files which match the file pattern
+``test_*.yaml``.
+
+.. note:: This can be changed when using :py:mod:`pytest`
+          as your test runner by adding a section to your
+          project's ``pytest.ini``::
+
+             [pytest]
+             climactic_files=test_*.yml
+
+
+The first line identifies the beginning of a YAML document::
 
     ---
 

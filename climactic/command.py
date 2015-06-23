@@ -8,6 +8,8 @@ Defines the commands that can be used at the
 top-level of an input test YAML file. Commands
 are executed in order and "do something".
 
+.. autoclass:: Command
+
 .. autoclass:: RunCommand
 
 .. autoclass:: EnvCommand

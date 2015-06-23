@@ -3,6 +3,13 @@
 ``climactic.errors``
 --------------------
 
+.. autoclass:: ClimacticError
+
+.. autoclass:: ClimacticUserError
+
+.. autoclass:: ClimacticSyntaxError
+
+.. autoclass:: ClimacticUnknownTagError
 
 """
 
@@ -34,6 +41,6 @@ class ClimacticSyntaxError(ClimacticUserError):
 class ClimacticUnknownTagError(ClimacticSyntaxError):
 
     """
-    Something was wrong with user input
-    in a test file (.yml).
+    A tag in a test file was misspelled
+    or is not defined.
     """

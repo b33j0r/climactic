@@ -1,13 +1,5 @@
 #! /usr/bin/env python
 """
-**YAML-based tests for commandline utilities**
-
-A simple testing framework for running shell commands and
-verifying their behavior. Tests are written as YAML files
-which specify the commands to run, along with assertions
-about the output (currently, stdout and file/directory
-contents).
-
 .. automodule:: climactic.assertion
 
 .. automodule:: climactic.command

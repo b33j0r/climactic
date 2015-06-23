@@ -10,6 +10,8 @@ the order they appear in the test file YAML
 (because an Assertion is implemented as a
 Command).
 
+.. autoclass:: Assertion
+
 .. autoclass:: AssertOutputCommand
 
 .. autoclass:: AssertTreeCommand
@@ -27,7 +29,16 @@ from climactic.utility import substitute_env_vars
 logger = logging.getLogger(__name__)
 
 
-class AssertOutputCommand(Command):
+class Assertion(Command):
+
+    """
+    Base class for assertions.
+    """
+
+    is_abstract = True
+
+
+class AssertOutputCommand(Assertion):
 
     """
     Test condition command. Asserts that the
@@ -62,7 +73,7 @@ class AssertOutputCommand(Command):
         )
 
 
-class AssertTreeCommand(Command):
+class AssertTreeCommand(Assertion):
 
     """
     Test condition command. Asserts that the
@@ -142,7 +153,7 @@ class AssertTreeCommand(Command):
         return paths
 
 
-class AssertFileUtf8Command(Command):
+class AssertFileUtf8Command(Assertion):
 
     """
     Test condition command. Asserts that the

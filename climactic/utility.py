@@ -3,6 +3,11 @@
 ``climactic.utility``
 ---------------------
 
+Contains miscellaneous code.
+
+.. autoclass:: ClimacticTempDir
+
+.. autofunction:: substitute_env_vars
 """
 import os
 import pathlib
@@ -22,8 +27,8 @@ class ClimacticTempDir(tempfile.TemporaryDirectory):
     exits. Also sets the restores the CWD environment
     variable.
 
-    NOTE: also yields a pathlib.Path object instead of
-          a string
+.. note:: yields a :py:class:`pathlib.Path` object
+          instead of a str
     """
 
     def __enter__(self):

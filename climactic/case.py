@@ -3,7 +3,7 @@
 ``climactic.case``
 ------------------
 
-
+.. autoclass:: CliTestCase
 """
 import logging
 import unittest
@@ -29,8 +29,9 @@ class CliTestCase(unittest.TestCase):
         """
         Loads a test case from a YAML file.
 
-        :param path (str, Path): The input file path
-        :return (CliTestCase):
+        :param path: The input file path
+        :type path: (str, Path)
+        :rtype: CliTestCase
         """
         path = Path(path)
         parser = Parser()

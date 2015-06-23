@@ -7,6 +7,12 @@
 Defines the commands that can be used at the
 top-level of an input test YAML file. Commands
 are executed in order and "do something".
+
+.. autoclass:: RunCommand
+
+.. autoclass:: EnvCommand
+
+.. autoclass:: WriteFileUtf8Command
 """
 import os
 import subprocess
@@ -47,7 +53,19 @@ class Command(Tag):
 class EnvCommand(Command):
 
     """
-    Exports environment variables.
+    Exports environment variables::
+
+        ---
+        # A very simple test!
+
+        - !env
+            MY_STRING: "Hey guys!"
+
+        - !run >
+            echo ${MY_STRING}
+
+        - !assert-output >
+            Hey guys!
     """
     NAME = "env"
 
@@ -64,8 +82,17 @@ class RunCommand(Command):
 
     """
     Runs one or more lines of bash-style commands.
-    ${VAR} replacement is performed on each command
-    using the current environment variables.
+    ``${VAR}`` replacement is performed on each command
+    using the current environment variables::
+
+        ---
+        # A very simple test!
+
+        - !run >
+            echo Hello world!
+
+        - !assert-output >
+            Hello world!
     """
 
     NAME = "run"
@@ -99,7 +126,18 @@ class RunCommand(Command):
 class WriteFileUtf8Command(Command):
 
     """
-    Writes text to a file, encoded in utf-8.
+    Writes text to a file, encoded in utf-8::
+
+        ---
+        # A simple test which writes to a file
+
+        - write-file-utf8:
+            hello.txt: Hello world!
+
+        - assert-output: ""
+
+        - assert-file-utf8:
+            hello.txt: Hello world!
     """
 
     NAME = "write-file-utf8"

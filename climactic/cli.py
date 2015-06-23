@@ -3,7 +3,8 @@
 ``climactic.cli``
 -----------------
 
-
+The command-line interface to climactic's test runner,
+which is based on :py:mod:`unittest`.
 """
 import sys
 import argparse

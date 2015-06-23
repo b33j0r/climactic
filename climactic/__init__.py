@@ -1,10 +1,6 @@
 #! /usr/bin/env python
 """
-climactic
----------
-
-YAML-based tests for commandline utilities
-==========================================
+**YAML-based tests for commandline utilities**
 
 A simple testing framework for running shell commands and
 verifying their behavior. Tests are written as YAML files
@@ -12,14 +8,15 @@ which specify the commands to run, along with assertions
 about the output (currently, stdout and file/directory
 contents).
 
-
 .. automodule:: climactic.assertion
 
-.. automodule:: climactic.case
+.. automodule:: climactic.command
+
+.. automodule:: climactic.tag
 
 .. automodule:: climactic.cli
 
-.. automodule:: climactic.command
+.. automodule:: climactic.case
 
 .. automodule:: climactic.errors
 
@@ -31,10 +28,7 @@ contents).
 
 .. automodule:: climactic.suite
 
-.. automodule:: climactic.tag
-
 .. automodule:: climactic.utility
-
 """
 
 import logging

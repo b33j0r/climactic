@@ -6,6 +6,10 @@
 A tag is a more general concept than a command.
 It refers to any object which is parsed in input
 YAML. Commands are also tags.
+
+.. autoclass:: Tag
+
+.. autoclass:: NameTag
 """
 import yaml
 import logging
@@ -118,6 +122,14 @@ class Tag(metaclass=TagMeta):
 class NameTag(Tag):
 
     """
+    Sets the name of a test (useful for putting
+    multiple tests in the same file)::
+
+        ---
+        - name: "My Test"
+
+        ---
+        - name: "My Second Test"
     """
 
     NAME = "name"

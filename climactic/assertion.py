@@ -9,6 +9,12 @@ the last command, etc. Assertions are executed in
 the order they appear in the test file YAML
 (because an Assertion is implemented as a
 Command).
+
+.. autoclass:: AssertOutputCommand
+
+.. autoclass:: AssertTreeCommand
+
+.. autoclass:: AssertFileUtf8Command
 """
 import os
 import logging
@@ -26,7 +32,16 @@ class AssertOutputCommand(Command):
     """
     Test condition command. Asserts that the
     output of the last command matches a given
-    string
+    string::
+
+        ---
+        # A very simple test!
+
+        - !run >
+            echo Hello world!
+
+        - !assert-output >
+            Hello world!
     """
 
     NAME = "assert-output"
@@ -53,7 +68,15 @@ class AssertTreeCommand(Command):
     Test condition command. Asserts that the
     specified directory tree exists. Children which
     are dicts are validated as directories, and
-    children which are strings are validated as files.
+    children which are strings are validated as files::
+
+        - run: |
+            mkdir hello
+            touch hello/world.txt
+
+        - assert-tree:
+            hello:
+            - world.txt
     """
 
     NAME = "assert-tree"
@@ -124,7 +147,13 @@ class AssertFileUtf8Command(Command):
     """
     Test condition command. Asserts that the
     contents of the specified file match the
-    given utf-8 plaintext.
+    given utf-8 plaintext::
+
+        - write-file-utf8:
+            hello.txt: Hello world!
+
+        - assert-file-utf8:
+            hello.txt: Hello world!
     """
 
     NAME = "assert-file-utf8"

@@ -1,1 +1,4 @@
-PyYAML==3.11
+PyYAML
+-e git+git://github.com/bitprophet/alabaster.git#egg=alabaster
+sphinx
+sphinx_rtd_theme

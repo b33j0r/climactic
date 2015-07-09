@@ -67,7 +67,7 @@ class CliTestSuite(unittest.TestSuite):
     def collect_file(cls, target_path, base_path=None):
         logger.debug(
             "Loading yml file %r",
-            target_path
+            str(target_path)
         )
         yield from CliTestCase.from_path(
             target_path,

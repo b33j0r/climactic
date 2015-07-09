@@ -16,8 +16,8 @@ from yaml.scanner import ScannerError
 from climactic.tag import Tag, TagFactory
 from climactic.errors import (
     ClimacticSyntaxError,
-    ClimacticUnknownTagError
-)
+    ClimacticUnknownTagError,
+    ClimacticError)
 
 
 class Parser:
@@ -47,7 +47,15 @@ class Parser:
         """
         file_path = Path(file_path)
         with file_path.open() as f:
-            yield from self.iparse_stream(f)
+            try:
+                yield from self.iparse_stream(f)
+            except ClimacticError as exc:
+                raise ClimacticError((
+                    "An error occured while "
+                    "parsing '{}'\n{}"
+                ).format(
+                    file_path, str(exc)
+                ))
 
     def parse_file(self, file_path):
         """

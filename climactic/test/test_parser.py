@@ -85,7 +85,7 @@ def test_parse_one_simple_test_with_dict_syntax():
     assert len(test) == 3
     assert isinstance(test[0], tag.NameTag)
     assert test[0].value == "Name"
-    assert isinstance(test[1], command.RunCommand)
+    assert isinstance(test[1], command.ShellRunCommand)
     assert test[1].cmd_lines == ["echo Hello world!"]
     assert isinstance(test[2],
                       climactic.assertion.AssertOutputCommand)
@@ -108,7 +108,7 @@ def test_parse_one_simple_test_with_tag_syntax():
     assert len(tests) == 1
     test = tests[0]
     assert len(test) == 2
-    assert isinstance(test[0], command.RunCommand)
+    assert isinstance(test[0], command.ShellRunCommand)
     assert isinstance(test[1],
                       climactic.assertion.AssertOutputCommand)
 
@@ -129,7 +129,7 @@ def test_parse_one_simple_test_with_mixed_syntax():
     assert len(tests) == 1
     test = tests[0]
     assert len(test) == 2
-    assert isinstance(test[0], command.RunCommand)
+    assert isinstance(test[0], command.ShellRunCommand)
     assert isinstance(test[1],
                       climactic.assertion.AssertOutputCommand)
 
@@ -164,7 +164,7 @@ def test_parse_two_simple_tests_with_mixed_syntax():
     assert len(tests) == 2
     for test in tests:
         assert len(test) == 3
-        assert isinstance(test[0], command.RunCommand)
+        assert isinstance(test[0], command.ShellRunCommand)
         assert isinstance(test[1],
                           climactic.assertion.AssertOutputCommand)
         assert isinstance(test[2], command.EnvCommand)

@@ -16,11 +16,13 @@ are executed in order and "do something".
 
 .. autoclass:: WriteFileUtf8Command
 """
+import json
 import os
 import subprocess
 import logging
 from pathlib import Path
 from abc import abstractmethod
+from io import StringIO, BytesIO
 
 from climactic.tag import Tag
 from climactic.utility import substitute_env_vars
@@ -80,7 +82,7 @@ class EnvCommand(Command):
         os.environ.update(self.env)
 
 
-class RunCommand(Command):
+class SubprocessRunCommand(Command):
 
     """
     Runs one or more lines of bash-style commands.
@@ -97,7 +99,7 @@ class RunCommand(Command):
             Hello world!
     """
 
-    NAME = "run"
+    NAME = "run-subprocess"
 
     def __init__(self, spec):
         try:
@@ -123,6 +125,64 @@ class RunCommand(Command):
             logger.info("Output:\n---\n%s---", output)
             outputs.append(output)
         os.environ["OUTPUT"] = "\n".join(outputs)
+
+
+class ShellRunCommand(Command):
+
+    """
+    Runs one or more lines of shell commands::
+
+        ---
+        # A very simple test!
+
+        - !run >
+            echo Hello world!
+
+        - !assert-output >
+            Hello world!
+    """
+
+    NAME = "run"
+    ENV_SEPARATOR = "***climactic*end-of-stdout***"
+
+    def __init__(self, spec):
+        try:
+            self.cmd_lines = spec.split('\n')
+        except AttributeError:
+            self.cmd_lines = list(spec)
+
+        self.cmd_lines = [
+            cmd_line for cmd_line in self.cmd_lines
+            if cmd_line.strip()
+        ]
+
+        self.cmd_lines_suffix = [
+            "echo " + self.ENV_SEPARATOR,
+            "unset OUTPUT",
+            "json-env"
+        ]
+
+        self.script = "\n".join(self.cmd_lines + self.cmd_lines_suffix)
+
+    def run(self, state, case):
+        cmd_args = [
+            "/usr/bin/env", "bash"
+        ]
+        p = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        stdout, stderr = p.communicate(self.script.encode())
+        stdout, env = stdout.decode().split(self.ENV_SEPARATOR)
+        stderr = stderr.decode() if stderr else ""
+        if env.strip():
+            env = json.loads(env)
+        else:
+            env = {}
+        if stdout.strip():
+            logger.info("stdout:\n---\n%s---", stdout)
+        if stderr.strip():
+            logger.info("stderr:\n---\n%s---", stderr)
+        logger.debug("env:\n---\n%s\n---", json.dumps(env, indent=2))
+
+        os.environ["OUTPUT"] = stdout
 
 
 class WriteFileUtf8Command(Command):

@@ -1,0 +1,48 @@
+---
+# A very simple test!
+
+- !name "env"
+
+- !env
+    MY_STRING: "Hey guys!"
+
+- !run >
+    echo ${MY_STRING}
+
+- !assert-output >
+    Hey guys!
+
+---
+# A very simple test!
+
+- !name "run-subprocess"
+
+- !run-subprocess >
+    echo Hello world!
+
+- !assert-output >
+    Hello world!
+
+---
+# A very simple test!
+
+- !name "run"
+
+- !run >
+    echo Hello world!
+
+- !assert-output >
+    Hello world!
+
+---
+# A simple test which writes to a file
+
+- !name "write-file-utf8"
+
+- write-file-utf8:
+    hello.txt: Hello world!
+
+- assert-output: ""
+
+- assert-file-utf8:
+    hello.txt: Hello world!

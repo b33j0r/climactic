@@ -3,14 +3,15 @@
 ``climactic.command``
 ---------------------
 
-
 Defines the commands that can be used at the
 top-level of an input test YAML file. Commands
 are executed in order and "do something".
 
 .. autoclass:: Command
 
-.. autoclass:: RunCommand
+.. autoclass:: ShellRunCommand
+
+.. autoclass:: SubprocessRunCommand
 
 .. autoclass:: EnvCommand
 
@@ -22,7 +23,6 @@ import subprocess
 import logging
 from pathlib import Path
 from abc import abstractmethod
-from io import StringIO, BytesIO
 
 from climactic.tag import Tag
 from climactic.utility import substitute_env_vars
@@ -92,7 +92,7 @@ class SubprocessRunCommand(Command):
         ---
         # A very simple test!
 
-        - !run >
+        - !run-subprocess >
             echo Hello world!
 
         - !assert-output >
@@ -130,7 +130,9 @@ class SubprocessRunCommand(Command):
 class ShellRunCommand(Command):
 
     """
-    Runs one or more lines of shell commands::
+    Runs one or more lines of shell commands
+    using bash (will be extended in the future
+    to use any shell)::
 
         ---
         # A very simple test!

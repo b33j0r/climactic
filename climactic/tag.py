@@ -16,7 +16,7 @@ import logging
 import traceback
 from abc import ABCMeta
 from yaml.constructor import ConstructorError
-
+from climactic.errors import ClimacticUnknownTagError, ClimacticBug
 
 logger = logging.getLogger(__name__)
 
@@ -73,16 +73,19 @@ class TagFactory:
             cmd_cls = cls._tag_registry[tag_name]
             return cmd_cls(spec)
         except KeyError:
-            logger.error(
-                "Tag %r is not defined", tag_name
+            raise ClimacticUnknownTagError(
+                "Tag {} is not defined".format(tag_name)
             )
         except TypeError:
-            logger.error(
+            raise ClimacticBug(
                 (
-                    "Tag %r is not "
+                    "Tag {} is not "
                     "implemented correctly\n\n"
-                    "%s"
-                ), tag_name, traceback.format_exc()
+                    "{}"
+                ).format(
+                    tag_name,
+                    traceback.format_exc()
+                )
             )
 
     @classmethod

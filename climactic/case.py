@@ -11,7 +11,8 @@ from pathlib import Path
 
 from climactic.command import Command
 import climactic.assertion  # noqa
-from climactic.tag import TagFactory, Tag
+from climactic.errors import ClimacticBug, ClimacticSyntaxError
+from climactic.tag import Tag
 from climactic.parser import Parser
 from climactic.utility import ClimacticTempDir
 
@@ -27,11 +28,11 @@ class CliTestCase(unittest.TestCase):
     @classmethod
     def from_path(cls, path, base_path=None):
         """
-        Loads a test case from a YAML file.
+        Loads test cases from a YAML file.
 
         :param path: The input file path
         :type path: (str, Path)
-        :rtype: CliTestCase
+        :rtype: generator
         """
         path = Path(path)
         parser = Parser()
@@ -47,16 +48,13 @@ class CliTestCase(unittest.TestCase):
         self.commands = []
         self.path = Path(path)
 
-        if path and not base_path:
-            raise ValueError(
-                "base_path must be specified "
-                "when path is specified"
-            )
-
-        self.base_path = Path(base_path)
+        if base_path:
+            self.base_path = Path(base_path)
+        else:
+            self.base_path = self.path.parent
 
         if not isinstance(tags, list):
-            raise RuntimeError(
+            raise ClimacticSyntaxError(
                 ("Parse error in {} "
                  "(YAML file does not evaluate "
                  "to a list)").format(
@@ -64,31 +62,26 @@ class CliTestCase(unittest.TestCase):
                 )
             )
 
-        for tag_or_dict in tags:
+        for tag in tags:
 
-            if isinstance(tag_or_dict, Command):
-                self.commands.append(tag_or_dict)
-                continue
+            if isinstance(tag, Command):
+                self.commands.append(tag)
 
-            if isinstance(tag_or_dict, Tag):
+            elif isinstance(tag, Tag):
                 setattr(
                     self,
-                    tag_or_dict.NAME,
-                    tag_or_dict.value
-                )
-                continue
-
-            if not isinstance(tag_or_dict, dict):
-                raise RuntimeError(
-                    ("Parse error in {} "
-                     "(YAML for task does not evaluate "
-                     "to a dict)").format(
-                        path or "<unknown>"
-                    )
+                    tag.NAME,
+                    tag.value
                 )
 
-            commands = TagFactory.build_tags(tag_or_dict)
-            self.commands.extend(commands)
+            else:
+                raise ClimacticBug((
+                    "Parser returned a {}; expected "
+                    "Command or Tag:\n{}"
+                ).format(
+                    type(tag).__name__,
+                    repr(tag)
+                ))
 
     def runTest(self):
         with ClimacticTempDir():

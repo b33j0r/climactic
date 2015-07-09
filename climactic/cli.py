@@ -85,5 +85,20 @@ def main(*args):
         return 2
 
 
+def json_env(*args):
+    import os
+    import json
+
+    print(
+        json.dumps(
+            {
+                k: str(v)
+                for k, v in os.environ.items()
+            },
+            indent=2
+        )
+    )
+
+
 if __name__ == "__main__":
     main(*(sys.argv[:1]))

@@ -49,7 +49,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'climactic=climactic.cli:main'
+            'climactic=climactic.cli:main',
+            'json-env=climactic.cli:json_env'
         ],
         'pytest11': [
             'pytest-climactic=climactic.plugins.pytest'

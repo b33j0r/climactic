@@ -23,10 +23,11 @@
 .. automodule:: climactic.utility
 """
 
+import os
 import logging
 
 
-logging.basicConfig(level=logging.WARN)
+logging.basicConfig(level=os.environ.get("CLIMACTIC_LOG_LEVEL", logging.WARN))
 
 PROJECT_AUTHOR = "Brian Jorgensen <brian.jorgensen@gmail.com>"
 

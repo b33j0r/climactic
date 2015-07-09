@@ -17,9 +17,14 @@
 class ClimacticError(Exception):
 
     """
-    Base climactic exception, used for
-    handling errors which are not (known)
-    bugs.
+    Base climactic exception.
+    """
+
+
+class ClimacticBug(ClimacticError):
+
+    """
+    Base climactic exception.
     """
 
 

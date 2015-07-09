@@ -1,0 +1,12 @@
+---
+# Creates a virtual environment and installs climactic
+
+- virtualenv:
+
+- write-file-utf8:
+    hello.txt: Hello world!
+
+- assert-output: ""
+
+- assert-file-utf8:
+    hello.txt: Hello world!

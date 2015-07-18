@@ -57,7 +57,8 @@ setup(
         ]
     },
     install_requires=[
-        "PyYAML==3.11"
+        "PyYAML==3.11",
+        "colorlog"
     ],
     tests_require=[
         "pytest>=2.7.1"

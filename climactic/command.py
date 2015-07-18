@@ -182,7 +182,7 @@ class ShellRunCommand(Command):
             logger.info("stdout:\n---\n%s---", stdout)
         if stderr.strip():
             logger.info("stderr:\n---\n%s---", stderr)
-        logger.debug("env:\n---\n%s\n---", json.dumps(env, indent=2))
+        # logger.debug("env:\n---\n%s\n---", json.dumps(env, indent=2))
 
         os.environ["OUTPUT"] = stdout
 

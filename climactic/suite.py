@@ -3,13 +3,13 @@
 ``climactic.suite``
 -------------------
 
-
 """
 import logging
 import unittest
 from pathlib import Path
 
 from climactic.case import CliTestCase
+
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +23,16 @@ class CliTestSuite(unittest.TestSuite):
     def from_targets(cls, *targets, **kwargs):
         suite = cls()
         tests = []
+        logger.debug("Processing target list '%s'", targets)
         for target in targets:
-            target_path = Path(target).resolve()
+            logger.debug("Processing target '%s'", target)
+            try:
+                target_path = Path(target).resolve()
+            except FileNotFoundError:
+                logger.warn(
+                    "Target '%s' could not be found", target
+                )
+                continue
 
             if target_path.is_dir():
                 target_tests = cls.collect_dir(

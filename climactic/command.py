@@ -119,10 +119,10 @@ class SubprocessRunCommand(Command):
                 substitute_env_vars(arg)
                 for arg in cmd_line.split(" ")
             ]
-            logger.info("Running `%s`", " ".join(cmd_args))
+            logger.debug("Running `%s`", " ".join(cmd_args))
             output_bytes = subprocess.check_output(cmd_args)
             output = output_bytes.decode()
-            logger.info("Output:\n---\n%s---", output)
+            logger.debug("Output:\n%s", output.rstrip())
             outputs.append(output)
         os.environ["OUTPUT"] = "\n".join(outputs)
 
@@ -164,14 +164,25 @@ class ShellRunCommand(Command):
             "json-env"
         ]
 
+        self.script_wo_suffix = "\n".join(self.cmd_lines)
         self.script = "\n".join(self.cmd_lines + self.cmd_lines_suffix)
 
     def run(self, state, case):
         cmd_args = [
             "/usr/bin/env", "bash"
         ]
-        p = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        stdout, stderr = p.communicate(self.script.encode())
+        p = subprocess.Popen(
+            cmd_args,
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE
+        )
+        logger.debug(
+            "Running script with `%s`:\n%s",
+            " ".join(cmd_args),
+            self.script_wo_suffix
+        )
+        script_bytes = self.script.encode()
+        stdout, stderr = p.communicate(script_bytes)
         stdout, env = stdout.decode().split(self.ENV_SEPARATOR)
         stderr = stderr.decode() if stderr else ""
         if env.strip():
@@ -179,10 +190,10 @@ class ShellRunCommand(Command):
         else:
             env = {}
         if stdout.strip():
-            logger.info("stdout:\n---\n%s---", stdout)
+            logger.debug("stdout:\n%s", stdout.rstrip())
         if stderr.strip():
-            logger.info("stderr:\n---\n%s---", stderr)
-        # logger.debug("env:\n---\n%s\n---", json.dumps(env, indent=2))
+            logger.debug("stderr:\n%s", stderr.rstrip())
+        logger.trace("env:\n%s", json.dumps(env, indent=2))
 
         os.environ["OUTPUT"] = stdout
 

@@ -16,9 +16,6 @@ any kind of shell-based application using just the
 files matching `**/test_*.yml`).
 
 
-**NOTE: ``climactic`` is a Python 3.4+ package**
-
-
 ### Hello, World!
 
 So, what does this actually look like? We try to keep it simple.
@@ -139,25 +136,27 @@ install from source (and, for example, cloned the source tree
 to ``~/climactic``):
 
     ~$ cd climactic
-    ~/climactic$ climactic examples -v 1
-    ...
+    ~/climactic$ climactic examples/test_hello.yml
+    .
     ----------------------------------------------------------------------
-    Ran 3 tests in 0.016s
-
+    Ran 1 test in 0.225s
+    
     OK
 
 When tests begin to get into the dozens or hundreds (and that
 one random one breaks or becomes slow for some reason), it can
 be nice to see which ones are running and when. For this purpose,
-we can specify ``--verbosity`` or its shortcut, ``-v``:
+we can specify ``--verbose`` or its shortcut, ``-v``:
 
-    ~/climactic$ climactic examples -v 2
-    examples/test_hello.yml ... ok
-    examples/git/test_init.yml ... ok
+    ~/climactic$ climactic -v examples/test_hello.yml
+    test_hello.yml ...
+    INFO     stdout:
+    Hello world!
+    ok
     
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.017s
-
+    Ran 1 test in 0.245s
+    
     OK
 
 

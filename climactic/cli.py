@@ -81,10 +81,30 @@ parser.set_defaults(
 
 
 parser.add_argument(
+    "--verbosity",
+    type=int,
+    default=1,
+    dest='verbosity',
+    help="Directly sets verbosity to 0-3 "
+         "(quiet, normal, verbose, or debug)"
+)
+
+
+parser.add_argument(
+    "-q", "--quiet",
+    action='store_const',
+    const=0,
+    dest='verbosity',
+    help="Log as little as possible, only serious problems (CRITICAL)"
+)
+
+
+parser.add_argument(
     "-v", "--verbose",
     action='store_const',
     const=2,
-    dest='verbosity'
+    dest='verbosity',
+    help="Log additional information, but not _everything_ (INFO)"
 )
 
 
@@ -92,8 +112,41 @@ parser.add_argument(
     "-vv", "--debug",
     action='store_const',
     const=3,
-    dest='verbosity'
+    dest='verbosity',
+    help="Log almost everything (DEBUG)"
 )
+
+
+parser.add_argument(
+    "-vvv", "--trace",
+    action='store_const',
+    const=4,
+    dest='verbosity',
+    help="Log everything available (TRACE)"
+)
+
+
+def _decide_verbosity_and_log_level(verbosity):
+    """
+    """
+    if verbosity == 0:
+        level = logging.CRITICAL
+    elif verbosity == 1:
+        level = logging.WARN
+    elif verbosity in [2, None]:
+        level = logging.INFO
+        verbosity = 2
+    elif verbosity == 3:
+        level = logging.DEBUG
+    elif verbosity == 4:
+        level = logging.TRACE
+    else:
+        raise ClimacticUserError((
+            "Verbosity level {} is invalid. "
+            "Choose from 0, 1, 2, 3, or 4."
+        ).format(verbosity))
+
+    return level, verbosity
 
 
 def main(*args):
@@ -103,32 +156,16 @@ def main(*args):
     try:
         namespace = parser.parse_args(args)
 
-        # Specifying -v without an argument assumes 2.
-        # Note that "default" above in the parser
-        # is 1, which applies only if -v is not
-        # specified at all
+        logging_level, verbosity = (
+            _decide_verbosity_and_log_level(
+                namespace.verbosity
+            )
+        )
 
-        # If -v is specified without an argument, it is
-        # None
-
-        verbosity = namespace.verbosity
-
-        if verbosity in [1]:
-            level = logging.WARN
-        elif verbosity in [2, None]:
-            level = logging.INFO
-        elif verbosity in [3]:
-            level = logging.DEBUG
-        else:
-            raise ClimacticUserError((
-                "Verbosity level {} is invalid. "
-                "Choose from 1, 2 or 3."
-            ).format(verbosity))
-
-        init_interactive_logging(level)
+        init_interactive_logging(logging_level)
         logger = logging.getLogger(__name__)
 
-        logger.debug("Initialized logger")
+        logger.trace("Initialized logger")
 
         logger.debug(namespace)
         result = CliTestRunner.run_for_targets(

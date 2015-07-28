@@ -23,14 +23,14 @@ class CliTestSuite(unittest.TestSuite):
     def from_targets(cls, *targets, **kwargs):
         suite = cls()
         tests = []
-        logger.debug("Processing target list '%s'", targets)
+        logger.debug("Processing target list {}", list(targets))
         for target in targets:
-            logger.debug("Processing target '%s'", target)
+            logger.debug("Processing target '{}'", target)
             try:
                 target_path = Path(target).resolve()
             except FileNotFoundError:
                 logger.warn(
-                    "Target '%s' could not be found", target
+                    "Target '{}' could not be found", target
                 )
                 continue
 
@@ -74,7 +74,7 @@ class CliTestSuite(unittest.TestSuite):
     @classmethod
     def collect_file(cls, target_path, base_path=None):
         logger.debug(
-            "Loading yml file %r",
+            "Loading yml file {!r}",
             str(target_path)
         )
         yield from CliTestCase.from_path(

@@ -17,6 +17,7 @@ are executed in order and "do something".
 
 .. autoclass:: WriteFileUtf8Command
 """
+from collections import OrderedDict
 import json
 import os
 import subprocess
@@ -119,12 +120,23 @@ class SubprocessRunCommand(Command):
                 substitute_env_vars(arg)
                 for arg in cmd_line.split(" ")
             ]
-            logger.debug("Running `%s`", " ".join(cmd_args))
+            logger.debug("Running `{}`", " ".join(cmd_args))
             output_bytes = subprocess.check_output(cmd_args)
             output = output_bytes.decode()
-            logger.debug("Output:\n%s", output.rstrip())
+            logger.debug("Output:\n{}", output.rstrip())
             outputs.append(output)
         os.environ["OUTPUT"] = "\n".join(outputs)
+
+
+def dict_diff(before, after):
+    diff = OrderedDict()
+    for bk, bv in before.items():
+        if bk not in after or bv != after[bk]:
+            diff[bk] = bv
+    for ak, av in after.items():
+        if ak not in before or av != before[ak]:
+            diff[ak] = av
+    return diff
 
 
 class ShellRunCommand(Command):
@@ -168,6 +180,7 @@ class ShellRunCommand(Command):
         self.script = "\n".join(self.cmd_lines + self.cmd_lines_suffix)
 
     def run(self, state, case):
+        original_env = os.environ.copy()
         cmd_args = [
             "/usr/bin/env", "bash"
         ]
@@ -177,7 +190,7 @@ class ShellRunCommand(Command):
             stdin=subprocess.PIPE
         )
         logger.debug(
-            "Running script with `%s`:\n%s",
+            "Running script with `{}`:\n{}",
             " ".join(cmd_args),
             self.script_wo_suffix
         )
@@ -190,10 +203,11 @@ class ShellRunCommand(Command):
         else:
             env = {}
         if stdout.strip():
-            logger.debug("stdout:\n%s", stdout.rstrip())
+            logger.debug("stdout:\n{}", stdout.rstrip())
         if stderr.strip():
-            logger.debug("stderr:\n%s", stderr.rstrip())
-        logger.trace("env:\n%s", json.dumps(env, indent=2))
+            logger.debug("stderr:\n{}", stderr.rstrip())
+        env_diff = dict_diff(original_env, env)
+        logger.trace("env changes:\n{}", json.dumps(env_diff, indent=2))
 
         os.environ["OUTPUT"] = stdout
 

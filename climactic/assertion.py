@@ -98,7 +98,7 @@ class AssertTreeCommand(Assertion):
     def run(self, state, case):
         for path, type_str in self.paths:
             logger.debug(
-                "assert-tree   %4s    %s",
+                "assert-tree   {:4}    {}",
                 type_str.upper(), str(path)
             )
             case.assertTrue(

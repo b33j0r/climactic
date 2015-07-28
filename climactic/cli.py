@@ -12,6 +12,9 @@ import argparse
 import textwrap
 import logging
 
+from climactic.log import init_interactive_logging
+init_interactive_logging(logging.ERROR)
+
 from climactic import (
     PROJECT_LONG_DESCRIPTION_NO_FEATURES,
     PROJECT_VERSION,
@@ -19,11 +22,10 @@ from climactic import (
     PROJECT_AUTHOR
 )
 from climactic.errors import ClimacticError, ClimacticUserError
-from climactic.log import init_interactive_logging
 from climactic.runner import CliTestRunner
+from climactic.log import TRACE
 
 
-init_interactive_logging()
 logger = logging.getLogger(__name__)
 
 
@@ -129,18 +131,16 @@ parser.add_argument(
 def _decide_verbosity_and_log_level(verbosity):
     """
     """
-    if verbosity == 0:
-        level = logging.CRITICAL
-    elif verbosity == 1:
-        level = logging.WARN
-    elif verbosity in [2, None]:
-        level = logging.INFO
-        verbosity = 2
-    elif verbosity == 3:
-        level = logging.DEBUG
-    elif verbosity == 4:
-        level = logging.TRACE
-    else:
+    verbosity_level = {
+        0: logging.CRITICAL,
+        1: logging.WARN,
+        2: logging.INFO,
+        3: logging.DEBUG,
+        4: TRACE
+    }
+    try:
+        level = verbosity_level[verbosity]
+    except KeyError:
         raise ClimacticUserError((
             "Verbosity level {} is invalid. "
             "Choose from 0, 1, 2, 3, or 4."
@@ -162,10 +162,15 @@ def main(*args):
             )
         )
 
-        init_interactive_logging(logging_level)
-        logger = logging.getLogger(__name__)
+        logger = init_interactive_logging(logging_level)
 
-        logger.trace("Initialized logger")
+        logger.trace("Initialized logger (TRACE)")
+        if verbosity == 4:
+            logger.debug("Initialized logger (DEBUG)")
+            logger.info("Initialized logger (INFO)")
+            logger.warning("Initialized logger (WARNING)")
+            logger.error("Initialized logger (ERROR)")
+            logger.critical("Initialized logger (CRITICAL)")
 
         logger.debug(namespace)
         result = CliTestRunner.run_for_targets(

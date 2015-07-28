@@ -57,8 +57,8 @@ setup(
         ]
     },
     install_requires=[
-        "PyYAML==3.11",
-        "colorlog"
+        "PyYAML",
+        "colorama"
     ],
     tests_require=[
         "pytest>=2.7.1"

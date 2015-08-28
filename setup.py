@@ -18,6 +18,7 @@ from climactic import (
     PROJECT_LONG_DESCRIPTION
 )
 
+
 def read_requirements(path):
     """Return a list of requirements from the file at the given path."""
     result = []

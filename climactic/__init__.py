@@ -23,7 +23,7 @@
 .. automodule:: climactic.utility
 """
 
-import climactic.log
+import climactic.log  # noqa
 
 PROJECT_AUTHOR = "Brian Jorgensen <brian.jorgensen@gmail.com>"
 

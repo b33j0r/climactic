@@ -1,5 +1,8 @@
-PyYAML
--e git+git://github.com/bitprophet/alabaster.git#egg=alabaster
-sphinx
-sphinx_rtd_theme
-colorama
+# runtime
+-r requirements/runtime.txt
+
+# testing
+-r requirements/extras/pytest.txt
+
+# documentation
+-r requirements/documentation.txt

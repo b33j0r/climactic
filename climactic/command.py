@@ -190,7 +190,7 @@ class ShellRunCommand(Command):
             stdin=subprocess.PIPE
         )
         logger.debug(
-            "Running script with `{}`:\n{}",
+            "Running script with `{}`:\n{fg:w}{}{R}",
             " ".join(cmd_args),
             self.script_wo_suffix
         )
@@ -203,11 +203,14 @@ class ShellRunCommand(Command):
         else:
             env = {}
         if stdout.strip():
-            logger.debug("stdout:\n{}", stdout.rstrip())
+            logger.debug("stdout:\n{fg:w}{}{R}", stdout.rstrip())
         if stderr.strip():
-            logger.debug("stderr:\n{}", stderr.rstrip())
+            logger.debug("stderr:\n{fg:w}{}{R}", stderr.rstrip())
         env_diff = dict_diff(original_env, env)
-        logger.trace("env changes:\n{}", json.dumps(env_diff, indent=2))
+        logger.trace(
+            "env changes:\n{fg:w}{}{R}",
+            json.dumps(env_diff, indent=4)
+        )
 
         os.environ["OUTPUT"] = stdout
 

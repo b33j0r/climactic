@@ -157,22 +157,26 @@ def main(*args):
         namespace = parser.parse_args(args)
 
         logging_level, verbosity = (
-            _decide_verbosity_and_log_level(
-                namespace.verbosity
-            )
+            _decide_verbosity_and_log_level(namespace.verbosity)
         )
 
         logger = init_interactive_logging(logging_level)
 
-        logger.trace("Initialized logger (TRACE)")
-        if verbosity == 4:
-            logger.debug("Initialized logger (DEBUG)")
-            logger.info("Initialized logger (INFO)")
-            logger.warning("Initialized logger (WARNING)")
-            logger.error("Initialized logger (ERROR)")
-            logger.critical("Initialized logger (CRITICAL)")
+        if verbosity > 3:
+            logger.info("")
+            logger.trace(
+                "{R}Previewing terminal colors and log level outputs: "
+                "{fg:r}r{fg:y}y{fg:g}g{fg:b}b{fg:i}i{fg:v}v{fg:$}"
+            )
+            logger.trace("a TRACE message")
+            logger.debug("a DEBUG message")
+            logger.info("an INFO message")
+            logger.warning("a WARNING message")
+            logger.error("an ERROR message")
+            logger.critical("a CRITICAL message")
+            logger.trace("{R}---")
 
-        logger.debug(namespace)
+        logger.trace("climactic cli invoked with: {}", namespace)
         result = CliTestRunner.run_for_targets(
             *namespace.target,
             verbosity=verbosity

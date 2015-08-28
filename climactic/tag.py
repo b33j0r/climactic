@@ -92,7 +92,7 @@ class TagFactory:
     def build_tags(cls, task_dict):
         tags = []
         for tag_name, spec in task_dict.items():
-            logger.debug(
+            logger.trace(
                 "Registered tag {!r}", tag_name
             )
             tag = cls.build_tag(tag_name, spec)

@@ -14,9 +14,9 @@ YAML. Commands are also tags.
 import yaml
 import logging
 import traceback
-from abc import ABCMeta
 from yaml.constructor import ConstructorError
 from climactic.errors import ClimacticUnknownTagError, ClimacticBug
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,20 @@ class TagFactory:
 
     @classmethod
     def register_tag(cls, tag_cls):
+        already_registered = tag_cls.NAME in cls._tag_registry
+
         cls._tag_registry[tag_cls.NAME] = tag_cls
+
+        logger.trace(
+            "  + Registered tag {!r}", tag_cls.NAME
+        )
+
+        if already_registered:
+            logger.error(
+                "During initialization, tag {!r} was "
+                "registered more than once",
+                tag_cls.NAME
+            )
 
         # support YAML tag syntax
         def yaml_constructor(loader, node):
@@ -79,8 +92,8 @@ class TagFactory:
         except TypeError:
             raise ClimacticBug(
                 (
-                    "Tag {} is not "
-                    "implemented correctly\n\n"
+                    "Tag {} is not implemented correctly"
+                    "\n\n"
                     "{}"
                 ).format(
                     tag_name,
@@ -92,51 +105,6 @@ class TagFactory:
     def build_tags(cls, task_dict):
         tags = []
         for tag_name, spec in task_dict.items():
-            logger.trace(
-                "Registered tag {!r}", tag_name
-            )
             tag = cls.build_tag(tag_name, spec)
             tags.append(tag)
         return tags
-
-
-class TagMeta(ABCMeta):
-
-    """
-    Used to automatically register all `Tag` subclasses
-    """
-
-    def __init__(cls, cls_name, bases=None, dct=None):
-        if not dct.pop("is_abstract", False):
-            TagFactory.register_tag(cls)
-        super().__init__(cls_name, bases, dct)
-
-
-class Tag(metaclass=TagMeta):
-
-    """
-    Base class for all tags that can be used in
-    test YAML files
-    """
-
-    is_abstract = True
-
-
-class NameTag(Tag):
-
-    """
-    Sets the name of a test (useful for putting
-    multiple tests in the same file)::
-
-        ---
-        - name: "My Test"
-
-        ---
-        - name: "My Second Test"
-    """
-
-    NAME = "name"
-
-    def __init__(self, spec):
-        assert isinstance(spec, str)
-        self.value = spec

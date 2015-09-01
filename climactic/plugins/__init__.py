@@ -1,5 +1,5 @@
 #! /usr/bin/env python
 """
-Contains integrations with other platforms.
-Currently, this means Pytest.
 """
+
+from climactic.plugins.discovery import ENTRYPOINT  # noqa

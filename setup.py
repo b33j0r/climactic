@@ -17,6 +17,7 @@ from climactic import (
     PROJECT_DESCRIPTION,
     PROJECT_LONG_DESCRIPTION
 )
+from climactic.plugins import ENTRYPOINT
 
 
 def read_requirements(path):
@@ -90,11 +91,17 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'climactic=climactic.cli:main',
-            'json-env=climactic.cli:json_env'
+            'climactic = climactic.cli:main',
+            'json-env = climactic.cli:json_env'
         ],
         'pytest11': [
-            'pytest-climactic=climactic.plugins.pytest'
+            'pytest-climactic = climactic.integrations.pytest'
+        ],
+        ENTRYPOINT: [
+            'climactic-core-assertions = climactic.tags.assertions',
+            'climactic-core-filesystem = climactic.tags.filesystem',
+            'climactic-core-metadata = climactic.tags.metadata',
+            'climactic-core-processes = climactic.tags.processes'
         ]
     },
     dependency_links=dependency_links(),

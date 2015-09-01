@@ -1,13 +1,14 @@
 #! /usr/bin/env python
 """
 """
-import pytest
 from io import StringIO
 from collections import Sequence
 
-from climactic import command
-from climactic import tag
-import climactic.assertion
+import pytest
+
+from climactic.tags.metadata import NameTag
+from climactic.tags.processes import ShellRunCommand, EnvCommand
+from climactic.tags.assertions import AssertOutputCommand
 from climactic.errors import (
     ClimacticSyntaxError,
     ClimacticUnknownTagError
@@ -83,12 +84,11 @@ def test_parse_one_simple_test_with_dict_syntax():
     assert len(tests) == 1
     test = tests[0]
     assert len(test) == 3
-    assert isinstance(test[0], tag.NameTag)
+    assert isinstance(test[0], NameTag)
     assert test[0].value == "Name"
-    assert isinstance(test[1], command.ShellRunCommand)
+    assert isinstance(test[1], ShellRunCommand)
     assert test[1].cmd_lines == ["echo Hello world!"]
-    assert isinstance(test[2],
-                      climactic.assertion.AssertOutputCommand)
+    assert isinstance(test[2], AssertOutputCommand)
     assert test[2].template.strip() == "Hello world!"
 
 
@@ -108,9 +108,8 @@ def test_parse_one_simple_test_with_tag_syntax():
     assert len(tests) == 1
     test = tests[0]
     assert len(test) == 2
-    assert isinstance(test[0], command.ShellRunCommand)
-    assert isinstance(test[1],
-                      climactic.assertion.AssertOutputCommand)
+    assert isinstance(test[0], ShellRunCommand)
+    assert isinstance(test[1], AssertOutputCommand)
 
 
 def test_parse_one_simple_test_with_mixed_syntax():
@@ -129,9 +128,8 @@ def test_parse_one_simple_test_with_mixed_syntax():
     assert len(tests) == 1
     test = tests[0]
     assert len(test) == 2
-    assert isinstance(test[0], command.ShellRunCommand)
-    assert isinstance(test[1],
-                      climactic.assertion.AssertOutputCommand)
+    assert isinstance(test[0], ShellRunCommand)
+    assert isinstance(test[1], AssertOutputCommand)
 
 
 def test_parse_two_simple_tests_with_mixed_syntax():
@@ -164,8 +162,7 @@ def test_parse_two_simple_tests_with_mixed_syntax():
     assert len(tests) == 2
     for test in tests:
         assert len(test) == 3
-        assert isinstance(test[0], command.ShellRunCommand)
-        assert isinstance(test[1],
-                          climactic.assertion.AssertOutputCommand)
-        assert isinstance(test[2], command.EnvCommand)
+        assert isinstance(test[0], ShellRunCommand)
+        assert isinstance(test[1], AssertOutputCommand)
+        assert isinstance(test[2], EnvCommand)
         assert test[2].env == {"A": 1, "B": 2}

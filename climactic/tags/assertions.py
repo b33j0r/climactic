@@ -1,41 +1,20 @@
 #! /usr/bin/env python
 """
-``climactic.assertion``
------------------------
-
-Assertions are commands used to test a condition,
-such as the existence of a file, the output of
-the last command, etc. Assertions are executed in
-the order they appear in the test file YAML
-(because an Assertion is implemented as a
-Command).
-
-.. autoclass:: Assertion
-
-.. autoclass:: AssertOutputCommand
-
-.. autoclass:: AssertTreeCommand
-
-.. autoclass:: AssertFileUtf8Command
 """
-import os
+
+
 import logging
+import os
 from pathlib import Path
-
-from climactic.command import Command
 from climactic.utility import substitute_env_vars
-
 
 logger = logging.getLogger(__name__)
 
 
-class Assertion(Command):
+class Assertion(object):
 
     """
-    Base class for assertions.
     """
-
-    is_abstract = True
 
 
 class AssertOutputCommand(Assertion):
@@ -65,12 +44,12 @@ class AssertOutputCommand(Assertion):
         expected = substitute_env_vars(self.template)
         try:
             actual = os.environ["OUTPUT"]
+            case.assertEqual(
+                expected.strip(),
+                actual.strip()
+            )
         except KeyError:
             case.fail("No command ran before assert-output")
-        case.assertEqual(
-            expected.strip(),
-            actual.strip()
-        )
 
 
 class AssertTreeCommand(Assertion):
@@ -185,3 +164,10 @@ class AssertFileUtf8Command(Assertion):
                 expected.strip(),
                 actual.strip()
             )
+
+
+tags = [
+    AssertFileUtf8Command,
+    AssertOutputCommand,
+    AssertTreeCommand
+]

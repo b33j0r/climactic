@@ -58,6 +58,7 @@ class CliTestSuite(unittest.TestSuite):
         tests = []
 
         dir_path = Path(dir_path)
+        logger.trace("+ Collecting dir {}", str(dir_path))
         target_paths = dir_path.glob(
             ("**" if recursive else "*") +
             "/test_*.yml"
@@ -69,12 +70,13 @@ class CliTestSuite(unittest.TestSuite):
                 base_path=dir_path
             ):
                 tests.append(test)
+        logger.trace("- Collecting dir {}", str(dir_path))
         return tests
 
     @classmethod
     def collect_file(cls, target_path, base_path=None):
         logger.trace(
-            "Loading yml file {!r}",
+            "  + Loading yml file {!r}",
             str(target_path)
         )
         yield from CliTestCase.from_path(

@@ -6,14 +6,20 @@
 The command-line interface to climactic's test runner,
 which is based on :py:mod:`unittest`.
 """
+
 import os
+from pprint import pformat
 import sys
 import argparse
 import textwrap
 import logging
 
 from climactic.log import init_interactive_logging
-init_interactive_logging(logging.ERROR)
+
+
+init_interactive_logging(logging.CRITICAL)
+logger = logging.getLogger(__name__)
+
 
 from climactic import (
     PROJECT_LONG_DESCRIPTION_NO_FEATURES,
@@ -21,12 +27,10 @@ from climactic import (
     PROJECT_COPYRIGHT_YEAR,
     PROJECT_AUTHOR
 )
+
+
 from climactic.errors import ClimacticError, ClimacticUserError
-from climactic.runner import CliTestRunner
 from climactic.log import TRACE
-
-
-logger = logging.getLogger(__name__)
 
 
 class ArgumentParserError(Exception):
@@ -77,15 +81,18 @@ parser.add_argument(
 )
 
 
-parser.set_defaults(
-    verbosity=os.environ.get("CLIMACTIC_LOG_LEVEL", 1)
+parser.add_argument(
+    "--logging-test",
+    action="store_true",
+    help="Log a string at each logging level",
+    dest="logging_test"
 )
 
 
 parser.add_argument(
     "--verbosity",
     type=int,
-    default=1,
+    default=os.environ.get("CLIMACTIC_LOG_LEVEL", 1),
     dest='verbosity',
     help="Directly sets verbosity to 0-3 "
          "(quiet, normal, verbose, or debug)"
@@ -162,11 +169,11 @@ def main(*args):
 
         logger = init_interactive_logging(logging_level)
 
-        if verbosity > 3:
-            logger.info("")
-            logger.trace(
+        if namespace.logging_test:
+            logger.info(
                 "{R}Previewing terminal colors and log level outputs: "
-                "{fg:r}r{fg:y}y{fg:g}g{fg:b}b{fg:i}i{fg:v}v{fg:$}"
+                "{fg:r}r{fg:y}y{fg:g}g{fg:b}b{fg:i}i{fg:v}v{fg:w}w"
+                "{bg:w}{fg:d}d{fg:$}"
             )
             logger.trace("a TRACE message")
             logger.debug("a DEBUG message")
@@ -174,15 +181,22 @@ def main(*args):
             logger.warning("a WARNING message")
             logger.error("an ERROR message")
             logger.critical("a CRITICAL message")
-            logger.trace("{R}---")
 
-        logger.trace("climactic cli invoked with: {}", namespace)
+        # This is currently when tag loading happens,
+        # so we want to do it after logging is set up
+        # so that the registration of tags can be logged
+        # at the TRACE level
+        from climactic.runner import CliTestRunner
+
+        logger.trace(
+            "climactic cli invoked with: {}",
+            pformat(vars(namespace))
+        )
         result = CliTestRunner.run_for_targets(
             *namespace.target,
             verbosity=verbosity
         )
-        status = 0 if result.wasSuccessful() else 1
-        return status
+        return 0 if result.wasSuccessful() else 1
 
     except ClimacticError as exc:
         logger.error(exc)
@@ -210,4 +224,4 @@ def json_env(*args):
 
 
 if __name__ == "__main__":
-    main(*(sys.argv[:1]))
+    main()

@@ -5,7 +5,6 @@
 
 
 """
-from pprint import pformat
 from pathlib import Path
 from collections import Mapping, Sequence
 
@@ -13,11 +12,12 @@ import yaml
 from yaml.constructor import ConstructorError
 from yaml.scanner import ScannerError
 
-from climactic.tag import Tag, TagFactory
+from climactic.tag import TagFactory
 from climactic.errors import (
     ClimacticSyntaxError,
     ClimacticUnknownTagError,
-    ClimacticError)
+    ClimacticError
+)
 
 
 class Parser:
@@ -134,18 +134,11 @@ class Parser:
     def parse_document_sequence(self, document):
         tags = []
         for tag in document:
-            if isinstance(tag, Tag):
-                tags.append(tag)
-                continue
             if not isinstance(tag, dict):
-                # TODO: extend PyYaml to provide line context
-                raise RuntimeError(
-                    ("YAML for tag does not "
-                     "evaluate to a mapping:"
-                     "\n{}").format(pformat(tag))
-                )
-            c = TagFactory.build_tags(tag)
-            tags.extend(c)
+                tags.append(tag)
+            else:
+                c = TagFactory.build_tags(tag)
+                tags.extend(c)
         return tags
 
     def parse_document_mapping(self, document):

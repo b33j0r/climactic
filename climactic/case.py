@@ -9,12 +9,13 @@ import logging
 import unittest
 from pathlib import Path
 
-from climactic.command import Command
-import climactic.assertion  # noqa
-from climactic.errors import ClimacticBug, ClimacticSyntaxError
-from climactic.tag import Tag
+from climactic.errors import ClimacticSyntaxError
 from climactic.parser import Parser
 from climactic.utility import ClimacticTempDir
+
+
+from climactic.plugins.discovery import load_plugins
+load_plugins()
 
 
 logger = logging.getLogger(__name__)
@@ -64,24 +65,14 @@ class CliTestCase(unittest.TestCase):
 
         for tag in tags:
 
-            if isinstance(tag, Command):
-                self.commands.append(tag)
-
-            elif isinstance(tag, Tag):
+            try:
                 setattr(
                     self,
                     tag.NAME,
                     tag.value
                 )
-
-            else:
-                raise ClimacticBug((
-                    "Parser returned a {}; expected "
-                    "Command or Tag:\n{}"
-                ).format(
-                    type(tag).__name__,
-                    repr(tag)
-                ))
+            except AttributeError:
+                self.commands.append(tag)
 
     def runTest(self):
         with ClimacticTempDir():

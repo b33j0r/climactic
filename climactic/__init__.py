@@ -29,7 +29,7 @@ PROJECT_AUTHOR = "Brian Jorgensen <brian.jorgensen@gmail.com>"
 
 PROJECT_COPYRIGHT_YEAR = "2015"
 
-PROJECT_VERSION = '0.3.1'
+PROJECT_VERSION = '0.3.5'
 
 PROJECT_URL = 'https://github.com/b33j0r/climactic'
 

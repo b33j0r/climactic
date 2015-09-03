@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 """
 """
-from climactic import tag
+import climactic.tags.metadata
 
 
 def test_name_tag_stores_value():
-    n = tag.NameTag("test NameTag")
+    n = climactic.tags.metadata.NameTag("test NameTag")
     assert n.value == "test NameTag"

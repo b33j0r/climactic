@@ -4,11 +4,12 @@
 
 import os
 
-from climactic import command
+import climactic.tags.filesystem
+import climactic.tags.processes
 
 
 def test_env_command():
-    c = command.EnvCommand({
+    c = climactic.tags.processes.EnvCommand({
         "A": "a"
     })
     os.environ["A"] = "not-a"
@@ -20,7 +21,7 @@ def test_write_file_utf8(temp_dir):
     file_name = "hello"
     file_text = "hello!"
     file_path = (temp_dir / file_name)
-    c = command.WriteFileUtf8Command({
+    c = climactic.tags.filesystem.WriteFileUtf8Command({
         file_name: file_text
     })
     assert not file_path.exists()

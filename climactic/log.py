@@ -9,8 +9,9 @@ __all__ = [
 
 
 import logging
-
 import colorama
+
+
 colorama.init()
 
 
@@ -61,6 +62,7 @@ class ColorTag(object):
         "i": "blue",
         "v": "magenta",
         "w": "white",
+        "d": "black",
         "$": "reset"
     }
 
@@ -162,4 +164,9 @@ def init_interactive_logging(level=logging.DEBUG):
     climactic_logger.addHandler(handler)
 
     climactic_logger.setLevel(level)
+
+    climactic_logger.trace(
+        "init_interactive_logging(level={})", level
+    )
+
     return climactic_logger

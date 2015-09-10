@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+"""
+.. autoclass:: NameTag
+"""
 
 
 class NameTag(object):

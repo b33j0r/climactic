@@ -49,12 +49,16 @@ class ClimacticTempDir(tempfile.TemporaryDirectory):
 
 
 def substitute_env_vars(s, environ=None):
+
     """
     Performs bash-style string substitution on substrings
-    matching the form ${VAR_NAME}
+    matching the form ${VAR_NAME}. Used by
+    :py:class:`~climactic.tags.assertions.AssertOutputCommand` and
+    :py:class:`~climactic.tags.processes.SubprocessRunCommand`.
 
     :param s: string to make substitutions within
     :return: the resulting string
     """
+
     environ = environ or os.environ
     return string.Template(s).safe_substitute(environ)

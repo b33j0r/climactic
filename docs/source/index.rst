@@ -10,9 +10,10 @@ about the output (currently, stdout and file/directory
 contents).
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
 
    tutorial
+   tags
    api
    whats-new
    license
@@ -23,4 +24,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

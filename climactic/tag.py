@@ -3,13 +3,10 @@
 ``climactic.tag``
 -----------------
 
-A tag is a more general concept than a command.
-It refers to any object which is parsed in input
-YAML. Commands are also tags.
+A tag is any object which is parsed in input
+YAML. Commands and assertions are also tags.
 
-.. autoclass:: Tag
-
-.. autoclass:: NameTag
+.. autoclass:: TagFactory
 """
 import yaml
 import logging

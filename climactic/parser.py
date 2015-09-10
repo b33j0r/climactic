@@ -3,7 +3,7 @@
 ``climactic.parser``
 --------------------
 
-
+.. autoclass:: ClimacticParser
 """
 from pathlib import Path
 from collections import Mapping, Sequence
@@ -20,7 +20,7 @@ from climactic.errors import (
 )
 
 
-class Parser:
+class ClimacticParser:
 
     """
     Parses climactic YAML files into collections
@@ -143,7 +143,7 @@ class Parser:
 
     def parse_document_mapping(self, document):
         raise NotImplementedError(
-            "Parser.parse_document_mapping"
+            "ClimacticParser.parse_document_mapping"
         )
 
 

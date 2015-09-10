@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 """
+.. autoclass:: WriteFileUtf8Command
 """
+
 import os
 from pathlib import Path
 

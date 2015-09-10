@@ -3,20 +3,22 @@
 ``climactic.suite``
 -------------------
 
+.. autoclass:: ClimacticTestSuite
 """
 import logging
 import unittest
 from pathlib import Path
 
-from climactic.case import CliTestCase
+from climactic.case import ClimacticTestCase
 
 
 logger = logging.getLogger(__name__)
 
 
-class CliTestSuite(unittest.TestSuite):
+class ClimacticTestSuite(unittest.TestSuite):
 
     """
+    A collection of tests.
     """
 
     @classmethod
@@ -79,7 +81,7 @@ class CliTestSuite(unittest.TestSuite):
             "  + Loading yml file {!r}",
             str(target_path)
         )
-        yield from CliTestCase.from_path(
+        yield from ClimacticTestCase.from_path(
             target_path,
             base_path=base_path
         )

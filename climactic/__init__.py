@@ -1,9 +1,5 @@
 #! /usr/bin/env python
 """
-.. automodule:: climactic.assertion
-
-.. automodule:: climactic.command
-
 .. automodule:: climactic.tag
 
 .. automodule:: climactic.cli
@@ -16,8 +12,6 @@
 
 .. automodule:: climactic.runner
 
-.. automodule:: climactic.state
-
 .. automodule:: climactic.suite
 
 .. automodule:: climactic.utility
@@ -29,7 +23,7 @@ PROJECT_AUTHOR = "Brian Jorgensen <brian.jorgensen@gmail.com>"
 
 PROJECT_COPYRIGHT_YEAR = "2015"
 
-PROJECT_VERSION = '0.3.5'
+PROJECT_VERSION = '0.4.0'
 
 PROJECT_URL = 'https://github.com/b33j0r/climactic'
 

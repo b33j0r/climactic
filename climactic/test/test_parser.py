@@ -13,12 +13,12 @@ from climactic.errors import (
     ClimacticSyntaxError,
     ClimacticUnknownTagError
 )
-from climactic.parser import Parser
+from climactic.parser import ClimacticParser
 
 
 def parse_str(yaml_str):
     stream = StringIO(yaml_str)
-    parser = Parser()
+    parser = ClimacticParser()
     tests = parser.parse_stream(stream)
     assert isinstance(tests, Sequence)
     assert not isinstance(tests, (str, bytes))

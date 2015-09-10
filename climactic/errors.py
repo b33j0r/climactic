@@ -24,14 +24,16 @@ class ClimacticError(Exception):
 class ClimacticBug(ClimacticError):
 
     """
-    Base climactic exception.
+    A meta-assertion about climactic's
+    behavior. i.e. something that shouldn't
+    happen, but did--whoops!
     """
 
 
 class ClimacticUserError(ClimacticError):
 
     """
-    Something went wrong in user input.
+    Something is invalid in user input.
     """
 
 

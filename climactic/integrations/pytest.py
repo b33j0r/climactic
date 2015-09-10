@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 """
+A :py:mod:`pytest` plugin which allows ``py.test`` to collect
+:py:mod:`climactic` YAML files.
 """
 
 import pytest
 from pathlib import Path
 
-from climactic.case import CliTestCase
+from climactic.case import ClimacticTestCase
 
 
 def pytest_addoption(parser):
@@ -24,6 +26,7 @@ def pytest_configure(config):
 
 
 class ClimacticPytestPlugin:
+
     def __init__(self, pattern):
         self.pattern = pattern
 
@@ -33,9 +36,10 @@ class ClimacticPytestPlugin:
 
 
 class ClimacticPytestFile(pytest.File):
+
     def collect(self):
         path = Path(str(self.fspath))
-        for climactic_case in CliTestCase.from_path(
+        for climactic_case in ClimacticTestCase.from_path(
             path,
             Path(str(self.parent.fspath))
         ):
@@ -47,6 +51,7 @@ class ClimacticPytestFile(pytest.File):
 
 
 class ClimacticPytestItem(pytest.Item):
+
     def __init__(self, name, parent, climactic_case):
         self.ccase = climactic_case
         super(ClimacticPytestItem, self).__init__(

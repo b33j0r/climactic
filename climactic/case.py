@@ -3,14 +3,14 @@
 ``climactic.case``
 ------------------
 
-.. autoclass:: CliTestCase
+.. autoclass:: ClimacticTestCase
 """
 import logging
 import unittest
 from pathlib import Path
 
 from climactic.errors import ClimacticSyntaxError
-from climactic.parser import Parser
+from climactic.parser import ClimacticParser
 from climactic.utility import ClimacticTempDir
 
 
@@ -21,10 +21,7 @@ load_plugins()
 logger = logging.getLogger(__name__)
 
 
-class CliTestCase(unittest.TestCase):
-
-    """
-    """
+class ClimacticTestCase(unittest.TestCase):
 
     @classmethod
     def from_path(cls, path, base_path=None):
@@ -36,7 +33,7 @@ class CliTestCase(unittest.TestCase):
         :rtype: generator
         """
         path = Path(path)
-        parser = Parser()
+        parser = ClimacticParser()
         for task_list in parser.iparse_file(path):
             yield cls(
                 task_list,

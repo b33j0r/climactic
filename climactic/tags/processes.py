@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 """
+.. autoclass:: EnvCommand
+
+.. autoclass:: ShellRunCommand
+
+.. autoclass:: SubprocessRunCommand
 """
 
 import os

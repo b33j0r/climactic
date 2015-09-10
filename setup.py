@@ -61,8 +61,10 @@ setup(
     version=PROJECT_VERSION,
     packages=[
         'climactic',
+        'climactic.tags',
         'climactic.test',
-        'climactic.plugins'
+        'climactic.plugins',
+        'climactic.integrations',
     ],
     url=PROJECT_URL,
     download_url=PROJECT_URL + '/tarball/v' + PROJECT_VERSION,

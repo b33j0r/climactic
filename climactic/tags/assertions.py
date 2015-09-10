@@ -1,7 +1,11 @@
 #! /usr/bin/env python
 """
-"""
+.. autoclass:: AssertOutputCommand
 
+.. autoclass:: AssertTreeCommand
+
+.. autoclass:: AssertFileUtf8Command
+"""
 
 import logging
 import os

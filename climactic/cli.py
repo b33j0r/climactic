@@ -186,13 +186,13 @@ def main(*args):
         # so we want to do it after logging is set up
         # so that the registration of tags can be logged
         # at the TRACE level
-        from climactic.runner import CliTestRunner
+        from climactic.runner import ClimacticTestRunner
 
         logger.trace(
             "climactic cli invoked with: {}",
             pformat(vars(namespace))
         )
-        result = CliTestRunner.run_for_targets(
+        result = ClimacticTestRunner.run_for_targets(
             *namespace.target,
             verbosity=verbosity
         )
